@@ -24,6 +24,7 @@ void setup() {
 
   startTime = millis();   //Get time in seconds
 
+  initBirds(150);
   sphereMeshSetup();
   createMesh4Elements();
 }
@@ -50,7 +51,13 @@ void draw() {
   placeElements();
   popMatrix();
 
+  pushMatrix();
+  //camera
   fill(250, 0, 0);
   customRotate(0, 0, 0, 0);
   sphere(20);
+  popMatrix();
+  
+  translate(-width/2, -height/2, -Rad);
+  drawBirds();
 }
