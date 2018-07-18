@@ -29,7 +29,9 @@ void placeElements() {
     translate(elementPos[i].x, elementPos[i].y, elementPos[i].z);
     //set value of self-rotation of the elements
     customRotate(0.7, 0.3, -0.5, 0.4);
-    sphere(8);
+    scale(5, 5, 5);
+    shape(virus, 0, 0);
+    //sphere(8);
     popMatrix();
   }
 }

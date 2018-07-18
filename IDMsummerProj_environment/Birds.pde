@@ -1,5 +1,5 @@
 ArrayList<Bird> birds = new ArrayList<Bird>();
-int offset = 50; //off set value to allow the 'bird'to fly throught the sphere
+int offset = 0; //off set value to allow the 'bird'to fly throught the sphere
 
 void initBirds(int n) {
   //resize the ArrayList
@@ -17,21 +17,22 @@ void drawBirds() {
 
 //create the class Bird
 class Bird {
-  PVector position = new PVector(random(-offset, width+offset), random(-offset, height+offset), random(-(Rad+offset), Rad+offset));
+  PVector position = new PVector(random(-offset, width+offset), random(-offset, height+offset), random(-(offset), Rad+offset));
   PVector direction = new PVector(random(-6, 6), random(-6, 6), random(-6, 6)); //speed
 
   void render() {
     pushMatrix();
     fill(0, 255, 0);
     translate(position.x, position.y, position.z);
-    box(8);
+    shape(hillix, 0, 0);
+    //box(8);
     popMatrix();
   }
 
   void step() {
     //find closest Bird
     Bird closestBird = null;
-    float closestDistance = 100000;
+    float closestDistance = 5000;
     for (Bird b : birds) {
       if (this != b) {
         float distance = position.dist(b.position);
@@ -47,23 +48,23 @@ class Bird {
 
     position.add(direction);
 
-    if (position.x < 100) {
-      position.x = width-100;
+    if (position.x < offset) {
+      position.x = width-offset;
     }
-    if (position.x > width-100) {
-      position.x = 100;
+    if (position.x > width-offset) {
+      position.x = offset;
     }
-    if (position.y < 100) {
-      position.y = height-100;
+    if (position.y < offset) {
+      position.y = height-offset;
     }
-    if (position.y > height-100) {
-      position.y = 100;
+    if (position.y > height-offset) {
+      position.y = offset;
     }
-    if (position.z < 100) {
-      position.z = height-100;
+    if (position.z < offset) {
+      position.z = Rad*2-offset;
     }
-    if (position.z > height-100) {
-      position.z =100;
+    if (position.z > Rad*2-offset) {
+      position.z =offset;
     }
   }
 }

@@ -1,48 +1,62 @@
 import peasy.PeasyCam;
 
+
 PeasyCam cam;
+PShape hillix;
+PShape virus;
 
 PVector[] vertices;
 PVector[] elementPos;
 
-int nPoints = 1500;  //The number of vertices to be shown
-int nElements = 30;  //The number of floating elements
-float Rad = 250; //The to-be-formed sphere's (the 'dome' container) radius
-float buffer = 30; //distance between the shpere mesh and the floating elements
-float connectionDistance = 30; //Threshold parameter of distance to connect
+int nPoints = 1850;  //The number of vertices to be shown
+int nElements = 50;  //The number of floating elements
+float Rad = 550; //The to-be-formed sphere's (the 'dome' container) radius
+float buffer = 200; //distance between the shpere mesh and the floating elements
+float connectionDistance = 65; //Threshold parameter of distance to connect
 float startTime;
 
 void setup() {
   size(1024, 768, P3D);
   frameRate(60);
-  sphereDetail(8);
-
-  //set ambient color
-  ambientLight(255, 214, 104);
+  //sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
-
+  hillix = loadShape("test_textured.obj");
+  virus = loadShape("virus_textured.obj");
   startTime = millis();   //Get time in seconds
 
-  initBirds(150);
+  initBirds(350);
   sphereMeshSetup();
   createMesh4Elements();
 }
 
 void draw() {
-  background(0);
-  lights();
-  lightFalloff(1.0, 0.001, 0.0);
-  lightSpecular(255, 243, 183);
+  //reset coordinates
+  camera();
+  background(10);
 
+  //set coordinate/direction of spotlight to follow camera
   pushMatrix();
-  customRotate(0.3, 0, 1, 0);
-  int concentration = 600;
-  spotLight(255, 199, 60, float(width), float(height), -Rad, 0, 0, -1, PI/16, concentration); 
+  lightFalloff(1, 0.3, 0.0);
+  lightSpecular(255, 243, 183);
+  //set ambient color
+  ambientLight(255, 214, 104);
+  //set rotation attributes for the light
+  customRotate(0.3, 0.3, 0.2, 0);
+  directionalLight(255, 255, 255, 0, 0, -1);
   popMatrix();
 
+  //manually set start the peasy camr
+  cam.feed();
+
+  stroke(255, 0, 0);
+  line(-300, 0, 0, 300, 0, 0); //x
+  stroke(0, 255, 0);
+  line(0, -300, 0, 0, 300, 0); //y
+  stroke(0, 0, 255);
+  line(0, 0, -300, 0, 0, 300); //z
+
   pushMatrix();
-  customRotate(0.5, 0.8, 0.5, 0.3);
   drawSphereMesh();
   popMatrix();
 
@@ -53,11 +67,23 @@ void draw() {
 
   pushMatrix();
   //camera
-  fill(250, 0, 0);
+  fill(255, 255, 255);
   customRotate(0, 0, 0, 0);
+  //translate(0, 0, -100);
+  noStroke();
+  shininess(0.5);
+  specular(255, 0, 0);
   sphere(20);
   popMatrix();
-  
+
+
   translate(-width/2, -height/2, -Rad);
   drawBirds();
+}
+
+void mouseReleased() {
+  println("rotation");  
+  println(cam.getRotations());  
+  println("position");  
+  println(cam.getPosition());
 }
