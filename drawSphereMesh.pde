@@ -1,7 +1,8 @@
 void sphereMeshSetup() {
   //Define the size and fill the vertices array
-  vertices = new PVector[nPoints];
-  vRef = new PVector[nPoints];
+  vertices = new PVector[nPoints];  //the 'from' position
+  vRef = new PVector[nPoints]; //the 'to' position
+  vReset = new PVector[nPoints]; //the 'to' position
 
   for (int i = 0; i<vertices.length; i++) {
     //Scan all the points
@@ -12,36 +13,42 @@ void sphereMeshSetup() {
     //cube [-1,1]x[-1,1]x[-1,1]  to form the sphere
     PVector center = new PVector(random(-1, 1), random(-1, 1), random(-1, 1));
     center.normalize(); //Normalize vector's length to 1
-
     center.mult(Rad);  //Now the center vector has length 'Rad'
 
-    //Set the randomly selected vertices
-    //as the center of the spheres
     vertices[i] = center;
+    vReset[i] = vertices[i];
     vRef[i] = vertices[i];
   }
 }
 
 void drawSphereMesh() {
   PVector velocity = new PVector(0, 0, 0);
+  PVector centroid = new PVector(0, 0, 0);
+
+  //changes the position of the vertices every cetain seconds
   if (millis() > now + meshBeatRate) {
-    for (int i = 0; i<vertices.length; i++) {
-      PVector acceleration = new PVector(random(-1, 1), random(-1, 1), random(-1, 1));
-      velocity.add(acceleration);
-      vertices[i].add(velocity);
-      println("updateMesh");
+    for (int i = 0; i<vRef.length; i++) {
+      PVector accelerate = new PVector(random(-1, 1), random(-1, 1), random(-1, 1));
+      velocity.add(accelerate);
+      vRef[i].add(velocity);
     }
+    velocity.set(centroid);
     now = millis();
   }
 
-  //Draw the mesh (vertices) of the sphere
-  beginShape(POINTS);
-  for (int i = 0; i<vertices.length; i++) {
-    vertex(vertices[i].x, vertices[i].y, vertices[i].z);
-  }
-  endShape();
+  for (int i = 0; i<nPoints; i++) {
+    if (vRef[i].dist(centroid)>=Rad+50 || vRef[i].dist(centroid)<=Rad-50) {
+      vRef[i] = PVector.lerp(vRef[i], vReset[i], 0.8);
+    }
+    
+    vertices[i] = PVector.lerp(vertices[i], vRef[i], 0.1);
 
-  float nlines=0;
+    ////Draw the mesh (vertices) of the sphere
+    //beginShape(POINT);
+    //vertex(vertices[i].x, vertices[i].y, vertices[i].z);
+    //endShape();
+    //reset vertices to initial position if it is offsetting too much
+  }
 
   //draw lines between near points,
   //lines are created as 3D quads to reflect the lights
@@ -51,7 +58,7 @@ void drawSphereMesh() {
       PVector vertb = vertices[b];
       float distance = dist(verta.x, verta.y, verta.z, vertb.x, vertb.y, vertb.z);
       if (distance  < connectionDistance) {
-        nlines+=1;        
+        //nlines+=1;
         stroke(255);
         beginShape();
         vertex(verta.x, verta.y, verta.z);
@@ -62,10 +69,4 @@ void drawSphereMesh() {
       }
     }
   }
-  //for (int i = 0; i<vertices.length; i++) {
-  //  translate(vertices[i].x, vertices[i].y, vertices[i].z);
-  //  stroke(130*noise(nlines/1), 130-130*noise(nlines/1), 130);
-  //  ellipse(3, 3, 3, 3);
-  //  filter(BLUR,5);
-  //}
 }
