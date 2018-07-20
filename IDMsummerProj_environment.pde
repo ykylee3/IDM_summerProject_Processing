@@ -1,6 +1,10 @@
+import ddf.minim.*;
 import peasy.PeasyCam;
 
 PeasyCam cam;
+Minim minim;
+AudioPlayer ambient;
+
 PShape hillix;
 PShape virus;
 PShape objColor;
@@ -13,6 +17,7 @@ PShape whole;
 PVector[] vertices;
 PVector[] vRef;
 PVector[] elementPos;
+PVector[] vReset;
 
 int[] elementCache;
 
@@ -34,6 +39,10 @@ void setup() {
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
+  minim = new Minim(this);
+  ambient = minim.loadFile("JupiterSound2001.mp3");
+  ambient.play();
+  ambient.loop();
   hillix = loadShape("test_textured.obj");
   virus = loadShape("virus_textured.obj");
   objColor = loadShape("color.obj");
