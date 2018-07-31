@@ -5,12 +5,12 @@ PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
 
-PShape hillix;
+PShape helix;
 PShape virus;
-PShape objColor;
-PShape diamond;
+PShape DNA;
+PShape threeobjects;
 PShape six;
-PShape whole;
+PShape alien;
 
 //PShader neon;
 
@@ -35,20 +35,18 @@ float meshBeatRate = 4300;
 
 void setup() {
   size(1024, 768, P3D);
-  frameRate(60);
+  //frameRate(60);
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
   ambient = minim.loadFile("JupiterSound2001.mp3");
-  ambient.play();
-  ambient.loop();
-  hillix = loadShape("test_textured.obj");
-  virus = loadShape("virus_textured.obj");
-  objColor = loadShape("color.obj");
-  diamond = loadShape("diamond.obj");
+  helix = loadShape("helix.obj");
+  virus = loadShape("virus.obj");
+  DNA = loadShape("DNA.obj");
+  threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
-  whole = loadShape("whole.obj");
+  alien = loadShape("alien.obj");
 
   //neon = loadShader("neon.glsl");
 
@@ -58,6 +56,9 @@ void setup() {
   sphereMeshSetup();
   createMesh4Elements();
   plantSeed(); //must be called after createMesh4Elements();
+
+  ambient.play();
+  ambient.loop();
 }
 
 void draw() {
@@ -73,7 +74,7 @@ void draw() {
   //set coordinate/direction of spotlight to follow camera
   pushMatrix();
 
-  //set ambient color
+  //set ambient DNA
   ambientLight(255, 214, 104);
 
   //set rotation attributes for the directional light
@@ -94,7 +95,7 @@ void draw() {
   line(0, 0, -300, 0, 0, 300); //z
 
   pushMatrix();
-  customRotate(0.15, -0.5, -0.2, 0.1);
+  customRotate(0.05, -0.5, -0.2, 0.1);
   drawSphereMesh();
   popMatrix();
 

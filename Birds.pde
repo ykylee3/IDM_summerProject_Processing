@@ -25,7 +25,7 @@ class Bird {
     fill(0, 255, 0);
     translate(position.x, position.y, position.z);
     customRotate(0.5, 0.4, 0.4, 0);
-    shape(hillix, 0, 0);
+    shape(helix, 0, 0);
     //box(8);
     popMatrix();
   }

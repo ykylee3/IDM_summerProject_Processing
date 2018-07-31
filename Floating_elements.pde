@@ -49,14 +49,14 @@ void placeElements() {
       //set value of self-rotation of the elements
       customRotate(0.4, 0.1, 0.5, 0.2);
       scale(5, 5, 5);
-      shape(objColor, 0, 0);
+      shape(DNA, 0, 0);
       break;
 
     case 2:
       //set value of self-rotation of the elements
       customRotate(0.2, 0.5, 0.2, 0.3);
       scale(5, 5, 5);
-      shape(diamond, 0, 0);
+      shape(threeobjects, 0, 0);
       break;
     }
     //sphere(8);
