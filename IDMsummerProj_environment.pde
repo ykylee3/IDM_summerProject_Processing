@@ -63,7 +63,7 @@ void setup() {
 
 void draw() {
   background(10);
-  lightFalloff(1, 0.3, 0.4);
+  lightFalloff(1, 0.3, 0.4); 
   lightSpecular(255, 243, 183);
   shininess(0.5);
   specular(255, 255, 206); 
