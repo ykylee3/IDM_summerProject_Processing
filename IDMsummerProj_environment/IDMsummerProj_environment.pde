@@ -7,6 +7,7 @@ import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
 import KinectPV2.KJoint;
 import KinectPV2.*;
+import java.util.Iterator;
 
 PeasyCam cam;
 Minim minim;
@@ -46,8 +47,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  //size(1024, 768, P3D);
-  fullScreen(P3D);
+  size(1024, 768, P3D);
+  //fullScreen(P3D);
   //frameRate(60);
   sphereDetail(8);
 
