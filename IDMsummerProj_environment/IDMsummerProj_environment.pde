@@ -1,10 +1,13 @@
+
 import ddf.minim.*;
 import peasy.PeasyCam;
 
 //Toxiclibs and Kinect libs
+
 import toxi.geom.*;
 import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
+
 import KinectPV2.KJoint;
 import KinectPV2.*;
 
@@ -14,7 +17,10 @@ AudioPlayer ambient;
 
 //kinect
 KinectPV2 kinect;
+//attractor
+ArrayList<Particle> particles;
 Attractor[] attractors = new Attractor[200];
+
 VerletPhysics2D physics;
 
 PShape helix;
@@ -23,6 +29,7 @@ PShape DNA;
 PShape threeobjects;
 PShape six;
 PShape alien;
+PShape starcloud;
 
 //PShader neon;
 
@@ -30,17 +37,19 @@ PVector[] vertices;
 PVector[] vRef;
 PVector[] elementPos;
 PVector[] vReset;
+PVector[] attractorPos;
 
 int[] elementCache;
+int[] attractorCache;
 
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
 int nBirdObj = 3;    //Total number of varaieties for bird elements
 int nFloatObj = 3;   //Total number of varaieties for floating elements
 
-float Rad = 550; //The to-be-formed sphere's (the 'dome' container) radius
+float Rad = 1000; //The to-be-formed sphere's (the 'dome' container) radius
 float buffer = 200; //distance between the shpere mesh and the floating elements
-float connectionDistance = 80; //Threshold parameter of distance to connect
+float connectionDistance = 140; //Threshold parameter of distance to connect
 float startTime;
 float now = millis();
 float meshBeatRate = 4300;
@@ -48,7 +57,6 @@ float meshBeatRate = 4300;
 void setup() {
   //size(1024, 768, P3D);
   fullScreen(P3D);
-  //frameRate(60);
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
@@ -60,10 +68,19 @@ void setup() {
   threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
   alien = loadShape("alien.obj");
+  //starcloud = loadShape("starcloud.obj");
 
   //neon = loadShader("neon.glsl");
 
   startTime = millis();   //Get time in seconds
+
+  //add physics to the world (toxiclibs)
+  physics = new VerletPhysics2D ();
+  physics.setDrag (0.01);
+  physics.setWorldBounds(new Rect(0, 0, width, height));//do we need to set a world bound?
+  //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
+  particles = new ArrayList<Particle>();
+  AttractorPos(400);
 
   initBirds(350);
   sphereMeshSetup();
@@ -82,9 +99,9 @@ void setup() {
 void draw() {
   background(10);
   lightFalloff(1, 0.3, 0.4); 
-  lightSpecular(255, 243, 183);
-  shininess(0.5);
-  specular(255, 255, 206); 
+  lightSpecular(255, 255, 255);
+  //shininess(0.5);
+  //specular(255, 255, 255); 
 
   //reset coordinates
   camera();
@@ -93,10 +110,10 @@ void draw() {
   pushMatrix();
 
   //set ambient DNA
-  ambientLight(255, 214, 104);
+  ambientLight(255, 255, 255);
 
   //set rotation attributes for the directional light
-  customRotate(0, 0.3, 0.2, 0);
+  customRotate(0, 0, 0, 0);
   directionalLight(255, 255, 255, 0, 0, -1);
 
   popMatrix();
@@ -125,16 +142,25 @@ void draw() {
   pushMatrix();
   //camera
   fill(255, 255, 255);
+  noStroke();
   customRotate(0, 0, 0, 0);
   //translate(0, 0, -100);
-  noStroke();
+  drawParticles();
   sphere(20);
   popMatrix();
-
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
 
+
+  physics.update ();
+  //display particles
+  for (Particle p : particles) {
+    pushMatrix();
+    p.display();
+    popMatrix();
+  }
+  
   //draw kinect
   drawKinect();
 }

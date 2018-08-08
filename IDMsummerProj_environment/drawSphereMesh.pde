@@ -59,7 +59,7 @@ void drawSphereMesh() {
       float distance = dist(verta.x, verta.y, verta.z, vertb.x, vertb.y, vertb.z);
       if (distance  < connectionDistance) {
         //nlines+=1;
-        stroke(255, 50);
+        stroke(255);
         beginShape();
         vertex(verta.x, verta.y, verta.z);
         vertex(verta.x+1, verta.y+1, verta.z+1);

@@ -18,7 +18,7 @@ void drawBirds() {
 //create the class Bird
 class Bird {
   PVector position = new PVector(random(-offset, width+offset), random(-offset, height+offset), random(-(offset), Rad+offset));
-  PVector direction = new PVector(random(-4, 4), random(-4, 4), random(-4, 4)); //speed
+  PVector direction = new PVector(random(-3, 3), random(-3, 3), random(-3, 3)); //speed
 
   void render() {
     pushMatrix();

@@ -41,7 +41,7 @@ void placeElements() {
     case 0:
       //set value of self-rotation of the elements
       customRotate(0.7, 0.3, -0.5, 0.4);
-      scale(5, 5, 5);
+      scale(8, 8, 8);
       shape(virus, 0, 0);
       break;
 
@@ -55,7 +55,7 @@ void placeElements() {
     case 2:
       //set value of self-rotation of the elements
       customRotate(0.2, 0.5, 0.2, 0.3);
-      scale(5, 5, 5);
+      scale(13, 13, 13);
       shape(threeobjects, 0, 0);
       break;
     }

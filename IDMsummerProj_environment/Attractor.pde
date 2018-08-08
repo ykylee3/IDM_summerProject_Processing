@@ -7,8 +7,8 @@ class Attractor extends VerletParticle2D {
   Attractor (Vec2D loc) {
     super (loc);
     r = 10;
-    //physics.addParticle(this);
-    //physics.addBehavior(new AttractionBehavior(this, 80, 0.1f));
+    physics.addParticle(this);
+    physics.addBehavior(new AttractionBehavior(this, 120, 0.1f));
   }
 
   void display () {
