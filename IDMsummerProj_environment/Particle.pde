@@ -21,7 +21,7 @@ void AttractorPos(int nParticles) {
     //as the center of the spheres
     attractorPos[i] = center;
 
-    particles.add(new Particle(new Vec2D(attractorPos[i]));
+    particles.add(new Particle(new Vec2D(attractorPos[i].x, attractorPos[i].y)));
 
     println(i + ": " + attractorPos[i]);
   }
