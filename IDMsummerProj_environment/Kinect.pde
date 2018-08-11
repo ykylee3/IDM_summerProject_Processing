@@ -109,14 +109,14 @@ public void drawKinect() {
 
       // Creates attractors for each joint
       for (int j = 0; j < joints.length - 1; j++) {
-        if (attractors[j] == null)
+        if (attractors[i][j] == null)
         {
-          attractors[j] = new Attractor(new Vec2D(joints[j].getX(), joints[j].getY()));
+          attractors[i][j] = new Attractor(new Vec2D(joints[j].getX(), joints[j].getY()));
           println("Joint "+ j + " - " + joints[j].getX() + " - " + joints[j].getY());
         } else {
-          attractors[j].set(joints[j].getX(), joints[j].getY());
+          attractors[i][j].set(joints[j].getX(), joints[j].getY());
         }
-        attractors[j].display();
+        attractors[i][j].display();
       }
 
       int attr = joints.length - 1;
@@ -129,13 +129,13 @@ public void drawKinect() {
         float[] myJoint = myJoints.get(t);
         ellipse(myJoint[0], myJoint[1], 5, 5);
 
-        if (attractors[attr] == null)
+        if (attractors[i][attr] == null)
         {
-          attractors[attr] = new Attractor(new Vec2D(myJoint[0], myJoint[1]));
+          attractors[i][attr] = new Attractor(new Vec2D(myJoint[0], myJoint[1]));
         } else {
-          attractors[attr].set(myJoint[0], myJoint[1]);
+          attractors[i][attr].set(myJoint[0], myJoint[1]);
         }
-        attractors[attr].display();
+        attractors[i][attr].display();
         attr++;
       }
     }

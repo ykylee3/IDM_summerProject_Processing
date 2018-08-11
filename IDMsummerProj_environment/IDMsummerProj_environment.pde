@@ -19,7 +19,7 @@ AudioPlayer ambient;
 KinectPV2 kinect;
 //attractor
 ArrayList<Particle> particles;
-Attractor[] attractors = new Attractor[200];
+Attractor[][] attractors = new Attractor[6][200];
 
 VerletPhysics2D physics;
 
