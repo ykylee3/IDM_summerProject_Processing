@@ -55,8 +55,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  //size(1024, 768, P3D);
-  fullScreen(P3D);
+  size(1024, 768, P3D);
+  //fullScreen(P3D);
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
@@ -170,4 +170,43 @@ void mouseReleased() {
   println(cam.getRotations());  
   println("position");  
   println(cam.getPosition());
+}
+
+//MOOC ARDUINO
+void keyPressed(){
+  switch(key){
+  case 49:
+  inputSignal(1);
+  break;
+  
+  case 50:
+  inputSignal(2);
+  break;
+  
+  case 51:
+  inputSignal(3);
+  break;
+  
+  case 52:
+  inputSignal(4);
+  break;
+  }
+  //inputSignal(key);
+  
+}
+
+void inputSignal(int globe) {
+  //if 1 or 2
+  if (globe == 1 || globe == 2){
+    int randomNum = int(random(particles.size())); 
+    println(randomNum, particles.size());
+    particles.remove(randomNum);
+  }
+  //if 3 or 4
+  else if (globe == 3 || globe == 4){
+    particles.add(new Particle(new Vec2D(random(width), random(height))));
+    println(particles.size());
+  }
+  
+  println("globe " + globe + " pressed, particle created");
 }
