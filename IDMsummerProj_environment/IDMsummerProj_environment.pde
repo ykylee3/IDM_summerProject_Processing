@@ -77,7 +77,7 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag (0.01);
-  physics.setWorldBounds(new Rect(0, 0, width, height));//do we need to set a world bound?
+  //physics.setWorldBounds(new Rect(0, 0, width, height));//do we need to set a world bound?
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   AttractorPos(400);
@@ -149,10 +149,6 @@ void draw() {
   sphere(20);
   popMatrix();
 
-  translate(-width/2, -height/2, -Rad);
-  drawBirds();
-
-
   physics.update ();
   //display particles
   for (Particle p : particles) {
@@ -160,17 +156,20 @@ void draw() {
     p.display();
     popMatrix();
   }
-  
+
   //draw kinect
   drawKinect();
+
+  translate(-width/2, -height/2, -Rad);
+  drawBirds();
 }
 
-void mouseReleased() {
-  println("rotation");  
-  println(cam.getRotations());  
-  println("position");  
-  println(cam.getPosition());
-}
+//void mouseReleased() {
+//  println("rotation");  
+//  println(cam.getRotations());  
+//  println("position");  
+//  println(cam.getPosition());
+//}
 
 //MOOC ARDUINO
 void keyPressed(){
@@ -178,21 +177,21 @@ void keyPressed(){
   case 49:
   inputSignal(1);
   break;
-  
+
   case 50:
   inputSignal(2);
   break;
-  
+
   case 51:
   inputSignal(3);
   break;
-  
+
   case 52:
   inputSignal(4);
   break;
   }
   //inputSignal(key);
-  
+
 }
 
 void inputSignal(int globe) {
@@ -207,6 +206,6 @@ void inputSignal(int globe) {
     particles.add(new Particle(new Vec2D(random(width), random(height))));
     println(particles.size());
   }
-  
+
   println("globe " + globe + " pressed, particle created");
 }

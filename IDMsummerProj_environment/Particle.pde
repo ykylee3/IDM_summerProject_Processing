@@ -50,11 +50,13 @@ class Particle extends VerletParticle2D {
 
 
   void display () {
-    pushMatrix();
-    fill (255, 0, 0);
-    translate(x, y);
-    sphere(r*2);
-    //shape(helix, x, y);//test with helix shape as the particles
-    popMatrix();
+    for (int i = 0; i<attractorPos.length; i++) {
+      pushMatrix();
+      fill (255, 0, 0);
+      translate(attractorPos[i].x, attractorPos[i].y, attractorPos[i].z);
+      sphere(r*2);
+      //shape(helix, x, y);//test with helix shape as the particles
+      popMatrix();
+    }
   }
 }
