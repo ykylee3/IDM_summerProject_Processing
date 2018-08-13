@@ -52,8 +52,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  size(1024, 768, P3D);
-  //fullScreen(P3D);
+  //size(1024, 768, P3D);
+  fullScreen(P3D);
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
@@ -74,7 +74,7 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag (0.01);
-  physics.setWorldBounds(new Rect(0, 0, Rad*2, Rad*2));//do we need to set a world bound?
+  physics.setWorldBounds(new Rect(0, 0, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -148,20 +148,20 @@ void draw() {
 
   pushMatrix();
   translate(-Rad, -Rad, -(Rad*0.75));
-  physics.update();
   //display particles
   for (Particle p : particles) {
     pushMatrix();
     p.display();
     popMatrix();
   }
-  
-  //draw kinect
+
+  physics.update();
   drawKinect();
   popMatrix();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
+  //draw kinect
 }
 
 //void mouseReleased() {
