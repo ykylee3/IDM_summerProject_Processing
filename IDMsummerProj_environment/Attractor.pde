@@ -1,7 +1,6 @@
 //Attractor class from The Nature of Code - Daniel Shiffman
 
 class Attractor extends VerletParticle2D {
-
   float r;
 
   Attractor (Vec2D loc) {

@@ -19,8 +19,7 @@ AudioPlayer ambient;
 KinectPV2 kinect;
 //attractor
 ArrayList<Particle> particles;
-Attractor[][] attractors = new Attractor[6][200];
-
+Attractor[][] attractors = new Attractor[6][800];
 VerletPhysics2D physics;
 
 PShape helix;
@@ -37,10 +36,8 @@ PVector[] vertices;
 PVector[] vRef;
 PVector[] elementPos;
 PVector[] vReset;
-PVector[] attractorPos;
 
 int[] elementCache;
-int[] attractorCache;
 
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
@@ -77,10 +74,12 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag (0.01);
-  //physics.setWorldBounds(new Rect(0, 0, width, height));//do we need to set a world bound?
+  physics.setWorldBounds(new Rect(0, 0, Rad*2, Rad*2));//do we need to set a world bound?
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
-  AttractorPos(400);
+  for (int i=0; i<attractors[0].length; i++) {
+    particles.add(new Particle(new Vec2D(random(Rad*2), random(Rad*2))));
+  }
 
   initBirds(350);
   sphereMeshSetup();
@@ -144,21 +143,22 @@ void draw() {
   fill(255, 255, 255);
   noStroke();
   customRotate(0, 0, 0, 0);
-  //translate(0, 0, -100);
-  drawParticles();
   sphere(20);
   popMatrix();
 
-  physics.update ();
+  pushMatrix();
+  translate(-Rad, -Rad, -(Rad*0.75));
+  physics.update();
   //display particles
   for (Particle p : particles) {
     pushMatrix();
     p.display();
     popMatrix();
   }
-
+  
   //draw kinect
   drawKinect();
+  popMatrix();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
@@ -172,37 +172,36 @@ void draw() {
 //}
 
 //MOOC ARDUINO
-void keyPressed(){
-  switch(key){
+void keyPressed() {
+  switch(key) {
   case 49:
-  inputSignal(1);
-  break;
+    inputSignal(1);
+    break;
 
   case 50:
-  inputSignal(2);
-  break;
+    inputSignal(2);
+    break;
 
   case 51:
-  inputSignal(3);
-  break;
+    inputSignal(3);
+    break;
 
   case 52:
-  inputSignal(4);
-  break;
+    inputSignal(4);
+    break;
   }
   //inputSignal(key);
-
 }
 
 void inputSignal(int globe) {
   //if 1 or 2
-  if (globe == 1 || globe == 2){
+  if (globe == 1 || globe == 2) {
     int randomNum = int(random(particles.size())); 
     println(randomNum, particles.size());
     particles.remove(randomNum);
   }
   //if 3 or 4
-  else if (globe == 3 || globe == 4){
+  else if (globe == 3 || globe == 4) {
     particles.add(new Particle(new Vec2D(random(width), random(height))));
     println(particles.size());
   }
