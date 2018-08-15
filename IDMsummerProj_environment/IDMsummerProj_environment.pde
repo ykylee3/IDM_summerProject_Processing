@@ -3,7 +3,6 @@ import ddf.minim.*;
 import peasy.PeasyCam;
 
 //Toxiclibs and Kinect libs
-
 import toxi.geom.*;
 import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
@@ -11,18 +10,38 @@ import toxi.physics2d.behaviors.*;
 import KinectPV2.KJoint;
 import KinectPV2.*;
 
+//serial lib
+import processing.serial.*;
+
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
 
 //kinect
 KinectPV2 kinect;
-//attractor
-ArrayList<Particle> particles;
-Attractor[][] attractors = new Attractor[6][200];
 
+//main particles arraylist
+ArrayList<Particle> particles;
+
+//particles_add arraylist (used for adding particles to the main particles array)
+ArrayList<Integer> particles_add = new ArrayList<Integer>(); //<>//
+
+//particles_remove arraylist (used for removing particles to the main particles array)
+ArrayList<Integer> particles_remove = new ArrayList<Integer>();
+
+//particles_explosion/creation arraylists 
+//(used to display particles with special effects in the same coordinates of the added/removed particles)
+ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
+ArrayList<float[]> particles_creation = new ArrayList<float[]>();
+
+//attractor
+Attractor[][] attractors = new Attractor[6][200];
 VerletPhysics2D physics;
 
+//arduino communication
+Serial myPort;  // Create object from Serial class
+
+//shapes
 PShape helix;
 PShape virus;
 PShape DNA;
@@ -57,6 +76,7 @@ float meshBeatRate = 4300;
 void setup() {
   size(1024, 768, P3D);
   //fullScreen(P3D);
+
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
@@ -87,13 +107,70 @@ void setup() {
   createMesh4Elements();
   plantSeed(); //must be called after createMesh4Elements();
 
-  ambient.play();
-  ambient.loop();
+  //ambient.play();
+  //ambient.loop();
 
   //Kinect Setup
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
   kinect.init();
+
+  //serial communication
+  myPort = new Serial(this, "COM5", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
+  
+  //Will run before draw, but always before draw runs, middle way among draw and setup
+  registerMethod("pre", this);
+
+}
+
+// Will run this inside draw() every time a particle is removed
+// Add here whatever you want to appear in the dead particle coordinates
+void explodeParticle(float x, float y){
+    fill(0, 255, 255);
+    translate(x, y);
+    sphere(100);
+}
+
+// Will run this inside draw() every time a particle is created
+// Add here whatever you want to appear in the new particle coordinates
+void createParticle(float x, float y){
+    fill(100, 255, 100);
+    translate(x, y);
+    sphere(100);
+}
+
+//method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
+void pre() {
+  //adds particles to the array particles_remove and from the particles added to 
+  //that array, removes particles from the array particles 
+   for (Integer num : particles_remove) {
+           int randParticleN = int(random(particles.size()));
+           Particle randParticle = particles.get(randParticleN);
+           println(randParticle.x(),randParticle.y());
+           float coordArray[] = new float [] {randParticle.x(),randParticle.y()};
+           //calling explosion event
+           particles_explosion.add(coordArray);
+           //removes from particles
+           particles.remove(randParticleN); 
+      }
+   //clean array particles_remove
+   particles_remove.clear();
+   
+   //adds particles to the array particles_add and from the particles added to 
+   //that array, adds particles in the array particles
+   for (Integer num : particles_add) {
+      float rndW = random(width);
+      float rndH = random(height);
+      float coordArray[] = new float [] {rndW,rndH};
+      //calling creation event
+      particles_creation.add(coordArray);
+      //adds to particles
+      particles.add(new Particle(new Vec2D(rndW,rndH)));      
+    }
+   //clean array particles_add
+   particles_add.clear();
 }
 
 void draw() {
@@ -118,7 +195,7 @@ void draw() {
 
   popMatrix();
 
-  //manually set start the peasy camr
+  //manually set start the peasy cam
   cam.feed();
 
   //xyz axis for debugging
@@ -151,15 +228,30 @@ void draw() {
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
-
-
+  
+  //updating physics
   physics.update ();
+  
   //display particles
   for (Particle p : particles) {
     pushMatrix();
     p.display();
     popMatrix();
+  } 
+  
+  //calling explosion
+  for ( float coordArray[] : particles_explosion ) {    
+    explodeParticle( coordArray[0],coordArray[1] );
   }
+  //cleaning array
+  particles_explosion.clear();
+  
+  //calling creation
+  for ( float coordArray[] : particles_creation ) {    
+    createParticle( coordArray[0],coordArray[1] );
+  }
+  //cleaning array
+  particles_creation.clear();
   
   //draw kinect
   drawKinect();
@@ -172,41 +264,47 @@ void mouseReleased() {
   println(cam.getPosition());
 }
 
-//MOOC ARDUINO
-void keyPressed(){
-  switch(key){
-  case 49:
-  inputSignal(1);
-  break;
-  
-  case 50:
-  inputSignal(2);
-  break;
-  
-  case 51:
-  inputSignal(3);
-  break;
-  
-  case 52:
-  inputSignal(4);
-  break;
+//serial event from arduino
+void serialEvent( Serial p ) {
+  String val = p.readString();
+  if ( val != null ) {
+      int number = int(trim(val)); //converting string to int
+      println( "plasma globe " + number );
+      inputSignal( number );
   }
-  //inputSignal(key);
-  
 }
 
-void inputSignal(int globe) {
+//MOOC ARDUINO
+void keyPressed() {
+  switch( key ) {
+  case 49:
+    inputSignal( 1 );
+    break;
+
+  case 50:
+    inputSignal( 2 );
+    break;
+
+  case 51:
+    inputSignal( 3 );
+    break;
+
+  case 52:
+    inputSignal( 4 );
+    break;
+  }
+  //inputSignal(key);
+}
+
+void inputSignal( int globe ) {
   //if 1 or 2
-  if (globe == 1 || globe == 2){
-    int randomNum = int(random(particles.size())); 
-    println(randomNum, particles.size());
-    particles.remove(randomNum);
+  if  (globe == 1 || globe == 2 ) {
+   particles_remove.add( 1 );
   }
   //if 3 or 4
-  else if (globe == 3 || globe == 4){
-    particles.add(new Particle(new Vec2D(random(width), random(height))));
-    println(particles.size());
+  else if ( globe == 3 || globe == 4 ) {
+    particles_add.add( 1 );
+   //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
+    println( particles_add.size() );
   }
-  
-  println("globe " + globe + " pressed, particle created");
 }
