@@ -22,6 +22,7 @@ KinectPV2 kinect;
 
 //main particles arraylist
 ArrayList<Particle> particles;
+<<<<<<< HEAD
 
 //particles_add arraylist (used for adding particles to the main particles array)
 ArrayList<Integer> particles_add = new ArrayList<Integer>(); //<>//
@@ -36,6 +37,9 @@ ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
 Attractor[][] attractors = new Attractor[6][200];
+=======
+Attractor[][] attractors = new Attractor[6][800];
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4
 VerletPhysics2D physics;
 
 //arduino communication
@@ -56,10 +60,8 @@ PVector[] vertices;
 PVector[] vRef;
 PVector[] elementPos;
 PVector[] vReset;
-PVector[] attractorPos;
 
 int[] elementCache;
-int[] attractorCache;
 
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
@@ -74,9 +76,14 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
+<<<<<<< HEAD
   size(1024, 768, P3D);
   //fullScreen(P3D);
 
+=======
+  //size(1024, 768, P3D);
+  fullScreen(P3D);
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
@@ -97,10 +104,12 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag (0.01);
-  physics.setWorldBounds(new Rect(0, 0, width, height));//do we need to set a world bound?
+  physics.setWorldBounds(new Rect(0, 0, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
-  AttractorPos(400);
+  for (int i=0; i<attractors[0].length; i++) {
+    particles.add(new Particle(new Vec2D(random(Rad*2), random(Rad*2))));
+  }
 
   initBirds(350);
   sphereMeshSetup();
@@ -221,17 +230,20 @@ void draw() {
   fill(255, 255, 255);
   noStroke();
   customRotate(0, 0, 0, 0);
-  //translate(0, 0, -100);
-  drawParticles();
   sphere(20);
   popMatrix();
 
+<<<<<<< HEAD
   translate(-width/2, -height/2, -Rad);
   drawBirds();
   
   //updating physics
   physics.update ();
   
+=======
+  pushMatrix();
+  translate(-Rad, -Rad, -(Rad*0.75));
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4
   //display particles
   for (Particle p : particles) {
     pushMatrix();
@@ -250,20 +262,24 @@ void draw() {
   for ( float coordArray[] : particles_creation ) {    
     createParticle( coordArray[0],coordArray[1] );
   }
+<<<<<<< HEAD
   //cleaning array
   particles_creation.clear();
   
   //draw kinect
+=======
+
+  physics.update();
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4
   drawKinect();
+  popMatrix();
+
+  translate(-width/2, -height/2, -Rad);
+  drawBirds();
+  //draw kinect
 }
 
-void mouseReleased() {
-  println("rotation");  
-  println(cam.getRotations());  
-  println("position");  
-  println(cam.getPosition());
-}
-
+<<<<<<< HEAD
 //serial event from arduino
 void serialEvent( Serial p ) {
   String val = p.readString();
@@ -291,6 +307,32 @@ void keyPressed() {
 
   case 52:
     inputSignal( 4 );
+=======
+//void mouseReleased() {
+//  println("rotation");  
+//  println(cam.getRotations());  
+//  println("position");  
+//  println(cam.getPosition());
+//}
+
+//MOOC ARDUINO
+void keyPressed() {
+  switch(key) {
+  case 49:
+    inputSignal(1);
+    break;
+
+  case 50:
+    inputSignal(2);
+    break;
+
+  case 51:
+    inputSignal(3);
+    break;
+
+  case 52:
+    inputSignal(4);
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4
     break;
   }
   //inputSignal(key);
@@ -298,6 +340,7 @@ void keyPressed() {
 
 void inputSignal( int globe ) {
   //if 1 or 2
+<<<<<<< HEAD
   if  (globe == 1 || globe == 2 ) {
    particles_remove.add( 1 );
   }
@@ -308,3 +351,18 @@ void inputSignal( int globe ) {
     println( particles_add.size() );
   }
 }
+=======
+  if (globe == 1 || globe == 2) {
+    int randomNum = int(random(particles.size())); 
+    println(randomNum, particles.size());
+    particles.remove(randomNum);
+  }
+  //if 3 or 4
+  else if (globe == 3 || globe == 4) {
+    particles.add(new Particle(new Vec2D(random(width), random(height))));
+    println(particles.size());
+  }
+
+  println("globe " + globe + " pressed, particle created");
+}
+>>>>>>> 0322fe30e4f2e9c4276f7ad516758a3455b854f4

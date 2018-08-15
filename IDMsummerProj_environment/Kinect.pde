@@ -101,7 +101,7 @@ public void drawKinect() {
       //fill(col);
       //stroke(col);
       
-      //drawBody(joints);
+      drawBody(joints);
 
       //draw different color for each hand state
       //drawHandState(joints[KinectPV2.JointType_HandRight]);
@@ -123,7 +123,7 @@ public void drawKinect() {
 
       //creates attractors for each custom joints
       for (int t = 0; t < myJoints.size(); t++) {
-        fill(255, 255, 0);
+        fill(255, 255, 255);
         //noFill();
         //noStroke();
         float[] myJoint = myJoints.get(t);
@@ -193,6 +193,8 @@ void drawBody(KJoint[] joints) {
 void drawJoint(KJoint[] joints, int jointType) {
   pushMatrix();
   translate(joints[jointType].getX(), joints[jointType].getY(), joints[jointType].getZ());
+  fill(255, 255, 255);
+  noStroke();
   ellipse(0, 0, 25, 25);
   popMatrix();
 }
@@ -201,7 +203,8 @@ void drawJoint(KJoint[] joints, int jointType) {
 void drawBone(KJoint[] joints, int jointType1, int jointType2) {
   pushMatrix();
   translate(joints[jointType1].getX(), joints[jointType1].getY(), joints[jointType1].getZ());
-  ellipse(0, 0, 25, 25);
+  fill(255, 255, 255);
+  ellipse(0, 0, 15, 15);
   popMatrix();
   line(joints[jointType1].getX(), joints[jointType1].getY(), joints[jointType1].getZ(), joints[jointType2].getX(), joints[jointType2].getY(), joints[jointType2].getZ());
 }
