@@ -92,7 +92,7 @@ void setup() {
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
-  ambient = minim.loadFile("JupiterSound2001.mp3");
+  ambient = minim.loadFile("ambience_combine.mp3");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");
@@ -147,7 +147,7 @@ void resetEvent(TCPClient c) {
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
-  ambient = minim.loadFile("JupiterSound2001.mp3");
+  ambient = minim.loadFile("ambience_combine.mp3");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");

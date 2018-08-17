@@ -92,7 +92,7 @@ void setup() {
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
-  ambient = minim.loadFile("JupiterSound2001.mp3");
+  ambient = minim.loadFile("ambience_combine.mp3");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");
@@ -122,12 +122,12 @@ void setup() {
   ambient.loop();
 
   //Kinect Setup
-  //kinect = new KinectPV2(this);
-  //kinect.enableSkeletonColorMap(true);
-  //kinect.init();
+  kinect = new KinectPV2(this);
+  kinect.enableSkeletonColorMap(true);
+  kinect.init();
 
   ////serial communication
-  //myPort = new Serial(this, "COM5", 9600);
+  //myPort = new Serial(this, "COM4", 9600);
   //delay(1000);
   //myPort.bufferUntil( 10 );
 
@@ -147,7 +147,7 @@ void resetEvent(TCPClient c) {
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
-  ambient = minim.loadFile("JupiterSound2001.mp3");
+  ambient = minim.loadFile("ambience_combine.mp3");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");
@@ -314,6 +314,8 @@ void frameEvent(TCPClient c) {
     p.display();
     popMatrix();
   } 
+  //draw kinect
+  drawKinect();
   popMatrix();
 
   //calling explosion
@@ -329,9 +331,6 @@ void frameEvent(TCPClient c) {
   }
   //cleaning array
   particles_creation.clear();
-
-  //draw kinect
-  //drawKinect();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
