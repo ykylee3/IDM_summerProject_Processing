@@ -72,8 +72,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  size(1024, 768, P3D);
-  //fullScreen(P3D);
+  //size(1024, 768, P3D);
+  fullScreen(P3D,SPAN);
 
   sphereDetail(8);
 
@@ -107,8 +107,8 @@ void setup() {
   createMesh4Elements();
   plantSeed(); //must be called after createMesh4Elements();
 
-  ambient.play();
-  ambient.loop();
+  //ambient.play();
+  //ambient.loop();
 
   //Kinect Setup
   kinect = new KinectPV2(this);
@@ -116,7 +116,7 @@ void setup() {
   kinect.init();
 
   //serial communication
-  myPort = new Serial(this, "COM5", 9600);
+  myPort = new Serial(this, "COM4", 9600);
   delay(1000);
   myPort.bufferUntil( 10 );
 
@@ -251,7 +251,7 @@ void draw() {
   particles_creation.clear();
 
   //draw kinect
-  //drawKinect()
+  drawKinect();
 }
 
 
