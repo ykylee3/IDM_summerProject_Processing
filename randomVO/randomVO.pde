@@ -15,7 +15,7 @@ int[] check=new int[total];
 int[] timeCheck=new int[total];
 
 void setup() {
-  size(976, 650);
+  size(10, 10);
   minim = new Minim(this);
 
   sequence0 = minim.loadFile("1_3.mp3");
@@ -53,7 +53,6 @@ void setup() {
 
 void draw() {
   playTrack();
-  trackLength();
   
   if (millis()-VOnow > time) { 
     VOnow = millis();
@@ -149,42 +148,67 @@ void playTrack() {
   for (int x=0; x<total; x++) {
     if (listen[x]==0) {
       sequence0.play();
+      trackLength();
     }
     if (listen[x]==1) {
       sequence1.play();
+        trackLength();
+
     }
     if (listen[x]==2) {
       sequence2.play();
+        trackLength();
+
     }
     if (listen[x]==3) {
       sequence3.play();
+        trackLength();
+
     }
     if (listen[x]==4) {
       sequence4.play();
+        trackLength();
+
     }
     if (listen[x]==5) {
       sequence5.play();
+        trackLength();
+
     }
     if (listen[x]==6) {
       sequence6.play();
+        trackLength();
+
     }
     if (listen[x]==7) {
       sequence7.play();
+        trackLength();
+
     }
     if (listen[x]==8) {
       sequence8.play();
+        trackLength();
+
     }
     if (listen[x]==9) {
       sequence9.play();
+        trackLength();
+
     }
     if (listen[x]==10) {
       sequence10.play();
+        trackLength();
+
     }
     if (listen[x]==11) {
       sequence11.play();
+        trackLength();
+
     }
     if (listen[x]==12) {
       sequence12.play();
+        trackLength();
+
     }
   }
 }
