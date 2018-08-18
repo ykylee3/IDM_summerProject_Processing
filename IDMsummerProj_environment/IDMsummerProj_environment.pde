@@ -116,9 +116,9 @@ void setup() {
   kinect.init();
 
   ////serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -254,35 +254,33 @@ void draw() {
   drawBirds();
 }
 
-////serial event from arduino
-//void serialEvent( Serial p ) {
-//  String val = p.readString();
-//  if ( val != null ) {
-//    client.broadcast(trim( val ));
-//  }
-//}
+//serial event from arduino
+void serialEvent( Serial p ) {
+  String val = p.readString();
+  if ( val != null ) {
+    int number = int( trim( val ) ); //converting string to int
+    println( "plasma globe " + number );
+    inputSignal( number );
+  }
+}
 
 //MOOC ARDUINO
 void keyPressed() {
   switch( key ) {
   case 49:
-    //inputSignal( 1 );
-    println("1");
+    inputSignal( 1 );
     break;
 
   case 50:
-    //inputSignal( 2 );
-    println("2");
+    inputSignal( 2 );
     break;
 
   case 51:
-    //inputSignal( 3 );
-    println("3");
+    inputSignal( 3 );
     break;
 
   case 52:
-    //inputSignal( 4 );
-    println("4");
+    inputSignal( 4 );
   }
   //inputSignal( key );
 }
