@@ -43,6 +43,12 @@ void drawSphereMesh() {
 
     vertices[i] = PVector.lerp(vertices[i], vRef[i], 0.1);
 
+    //Draw an obj at the vertices of the sphere
+    //pushMatrix();
+    //translate(vertices[i].x, vertices[i].y, vertices[i].z);
+    //shape(bowl, 0, 0);
+    //popMatrix();
+
     ////Draw the mesh (vertices) of the sphere
     //beginShape(POINT);
     //vertex(vertices[i].x, vertices[i].y, vertices[i].z);

@@ -15,8 +15,8 @@ class Particle extends VerletParticle2D {
 
   void display () {
     fill (255, 0, 0);
-    translate(x, y);
-    sphere(r*2);
-    //shape(helix, x, y);//test with helix shape as the particles
+    //translate(x, y);
+    //sphere(r*2);
+    shape(bowl, x, y);//test with helix shape as the particles
   }
 }

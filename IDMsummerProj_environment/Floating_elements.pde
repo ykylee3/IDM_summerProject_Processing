@@ -40,23 +40,37 @@ void placeElements() {
     switch(seed) {
     case 0:
       //set value of self-rotation of the elements
-      customRotate(0.7, 0.3, -0.5, 0.4);
+      pushMatrix();
+      customRotate(0.8, 0.3, -0.5, 0.4);
       scale(8, 8, 8);
       shape(virus, 0, 0);
+      popMatrix();
       break;
 
     case 1:
       //set value of self-rotation of the elements
-      customRotate(0.4, 0.1, 0.5, 0.2);
+      pushMatrix();
+      customRotate(2, 0.1, 0.5, 0.2);
       scale(5, 5, 5);
       shape(DNA, 0, 0);
+      popMatrix();
       break;
 
     case 2:
       //set value of self-rotation of the elements
-      customRotate(0.2, 0.5, 0.2, 0.3);
-      scale(13, 13, 13);
+      pushMatrix();
+      customRotate(1, 0.5, 0.2, 0.3);
+      scale(8, 8, 8);
       shape(threeobjects, 0, 0);
+      popMatrix();
+      break;
+
+    case 3:
+      //set value of self-rotation of the elements
+      pushMatrix();
+      customRotate(0.8, 0.7, 0.6, 0.4);
+      shape(rock3, 0, 0);
+      popMatrix();
       break;
     }
     //sphere(8);

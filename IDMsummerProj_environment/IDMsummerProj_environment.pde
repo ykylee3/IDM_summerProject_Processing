@@ -37,7 +37,7 @@ ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
 ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
-Attractor[][] attractors = new Attractor[4][500];
+Attractor[][] attractors = new Attractor[4][3500];
 VerletPhysics2D physics;
 
 //arduino communication
@@ -50,6 +50,9 @@ PShape DNA;
 PShape threeobjects;
 PShape six;
 PShape alien;
+PShape bowl;
+PShape rock1;
+PShape rock3;
 
 //PShader neon;
 
@@ -63,7 +66,7 @@ int[] elementCache;
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
 int nBirdObj = 3;    //Total number of varaieties for bird elements
-int nFloatObj = 3;   //Total number of varaieties for floating elements
+int nFloatObj = 4;   //Total number of varaieties for floating elements
 
 float Rad = 1000; //The to-be-formed sphere's (the 'dome' container) radius
 float buffer = 200; //distance between the shpere mesh and the floating elements
@@ -75,9 +78,6 @@ float meshBeatRate = 4300;
 void setup() {
   //fullScreen(P3D, SPAN);
   size(1200, 860, P3D);
-
-  // the random seed must be identical for all clients
-  randomSeed(1);
 
   //for debuggings
   sphereDetail(8);
@@ -91,7 +91,10 @@ void setup() {
   threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
   alien = loadShape("alien.obj");
-
+  bowl = loadShape("bowl.obj");
+  rock1 = loadShape("rock1.obj");
+  rock3 = loadShape("rock3.obj");
+  
   //stardust = new Movie(this, "starcloud_short.mov");
   stardust = new Movie(this, "star_cloud_withLight.MP4");
   stardust.loop();
@@ -111,7 +114,8 @@ void setup() {
   initBirds(350);
   sphereMeshSetup();
   createMesh4Elements();
-  plantSeed(); //must be called after createMesh4Elements();
+  plantSeed(); //plantseeds for Floating_elements must be called after createMesh4Elements();
+  //plantSeedBirds(); 
 
   ambient.play();
   ambient.loop();
