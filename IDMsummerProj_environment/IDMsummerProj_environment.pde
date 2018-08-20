@@ -74,7 +74,7 @@ float meshBeatRate = 4300;
 
 void setup() {
   //fullScreen(P3D, SPAN);
-  size(1200, 560, P3D);
+  size(1200, 860, P3D);
 
   // the random seed must be identical for all clients
   randomSeed(1);
@@ -93,7 +93,7 @@ void setup() {
   alien = loadShape("alien.obj");
 
   //stardust = new Movie(this, "starcloud_short.mov");
-  stardust = new Movie(this, "Starcloud Short-1.mp4");
+  stardust = new Movie(this, "star_cloud_withLight.MP4");
   stardust.loop();
 
   startTime = millis();   //Get time in seconds
@@ -210,7 +210,7 @@ void draw() {
   pushMatrix();
   //draws the animation of stardust
   customRotate(0, 0, 0, 0);
-  translate(-Rad/2, -Rad/2, -(Rad+buffer));
+  translate(-Rad, -Rad*0.7, -(Rad+buffer));
   image(stardust, 0, 0);
   popMatrix();
 
