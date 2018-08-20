@@ -1,13 +1,14 @@
 ArrayList<Bird> birds = new ArrayList<Bird>();
-int[] BirdSeeds;
+//int[] BirdSeeds;
 int offset = 0; //off set value to allow the 'bird'to fly throught the sphere
+int seed;
 
 void initBirds(int n) {
-  BirdSeeds = new int[n];
+  //BirdSeeds = new int[n];
   //resize the ArrayList
   for (int i = 0; i<n; i++) {
     birds.add(new Bird());
-    BirdSeeds[n] = randomSeeds(nBirdObj);
+    //BirdSeeds[i] = randomSeeds(nBirdObj);
   }
 }
 
@@ -30,7 +31,10 @@ class Bird {
     //customRotate(0.5, 0.4, 0.4, 0);
     //shape(helix, 0, 0);
     //popMatrix();
-    
+    //for (int i=0; i<BirdSeeds.length; i++) {
+    //  seed = BirdSeeds[i];
+    //}
+
     translate(position.x, position.y, position.z);
 
     //draws the objs based on the assigned attribute

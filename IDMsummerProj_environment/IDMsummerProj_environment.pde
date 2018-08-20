@@ -96,7 +96,8 @@ void setup() {
   rock3 = loadShape("rock3.obj");
   
   //stardust = new Movie(this, "starcloud_short.mov");
-  stardust = new Movie(this, "star_cloud_withLight.MP4");
+  //stardust = new Movie(this, "star_cloud_withLight.MP4");
+  stardust = new Movie(this, "galaxy.mp4");
   stardust.loop();
 
   startTime = millis();   //Get time in seconds
