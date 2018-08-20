@@ -251,7 +251,7 @@ void draw() {
     popMatrix();
   } 
   //draw kinect
-  //drawKinect();
+  drawKinect();
   popMatrix();
 
   //calling explosion
