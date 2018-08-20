@@ -11,10 +11,13 @@ import KinectPV2.*;
 
 //serial lib
 import processing.serial.*;
+import processing.video.*;
+
 
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
+Movie stardust;
 
 //kinect
 KinectPV2 kinect;
@@ -47,7 +50,6 @@ PShape DNA;
 PShape threeobjects;
 PShape six;
 PShape alien;
-PShape starcloud;
 
 //PShader neon;
 
@@ -71,7 +73,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  fullScreen(P3D, SPAN);
+  //fullScreen(P3D, SPAN);
+  size(1200, 560, P3D);
 
   // the random seed must be identical for all clients
   randomSeed(1);
@@ -88,7 +91,10 @@ void setup() {
   threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
   alien = loadShape("alien.obj");
-  //starcloud = loadShape("starcloud.obj");
+
+  //stardust = new Movie(this, "starcloud_short.mov");
+  stardust = new Movie(this, "Starcloud Short-1.mp4");
+  stardust.loop();
 
   startTime = millis();   //Get time in seconds
 
@@ -111,14 +117,14 @@ void setup() {
   ambient.loop();
 
   //Kinect Setup
-  kinect = new KinectPV2(this);
-  kinect.enableSkeletonColorMap(true);
-  kinect.init();
+  //kinect = new KinectPV2(this);
+  //kinect.enableSkeletonColorMap(true);
+  //kinect.init();
 
   ////serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -174,7 +180,7 @@ void pre() {
 
 void draw() {
   background(0);
-  
+
   lightFalloff(1, 0.3, 0.4); 
   lightSpecular(255, 255, 255);
 
@@ -200,6 +206,13 @@ void draw() {
   line(0, -300, 0, 0, 300, 0); //y
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
+
+  pushMatrix();
+  //draws the animation of stardust
+  customRotate(0, 0, 0, 0);
+  translate(-Rad/2, -Rad/2, -(Rad+buffer));
+  image(stardust, 0, 0);
+  popMatrix();
 
   pushMatrix();
   customRotate(0.05, -0.5, -0.2, 0.1);
@@ -233,7 +246,7 @@ void draw() {
     popMatrix();
   } 
   //draw kinect
-  drawKinect();
+  //drawKinect();
   popMatrix();
 
   //calling explosion
@@ -254,15 +267,20 @@ void draw() {
   drawBirds();
 }
 
-//serial event from arduino
-void serialEvent( Serial p ) {
-  String val = p.readString();
-  if ( val != null ) {
-    int number = int( trim( val ) ); //converting string to int
-    println( "plasma globe " + number );
-    inputSignal( number );
-  }
+//reads new frame of the movie 
+void movieEvent(Movie m) {
+  m.read();
 }
+
+//serial event from arduino
+//void serialEvent( Serial p ) {
+//  String val = p.readString();
+//  if ( val != null ) {
+//    int number = int( trim( val ) ); //converting string to int
+//    println( "plasma globe " + number );
+//    inputSignal( number );
+//  }
+//}
 
 //MOOC ARDUINO
 void keyPressed() {
