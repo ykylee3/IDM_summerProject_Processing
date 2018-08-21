@@ -50,10 +50,10 @@ PShape virus;
 PShape DNA;
 PShape threeobjects;
 PShape six;
-PShape alien;
 PShape bowl;
 PShape rock5;
-PShape rock3;
+PShape earth;
+PShape saturn;
 
 //PShader neon;
 
@@ -77,8 +77,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  //fullScreen(P3D, SPAN);
-  size(1200, 860, P3D);
+  fullScreen(P3D, SPAN);
+  //size(1200, 860, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -91,23 +91,25 @@ void setup() {
   DNA = loadShape("DNA.obj");
   threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
-  alien = loadShape("alien.obj");
   bowl = loadShape("bowl.obj");
-  rock3 = loadShape("rock3.obj");
   rock5 = loadShape("rock5.obj");
+  earth = loadShape("earth2.obj");
+  saturn = loadShape("Saturn.obj");
 
 
   //stardust = new Movie(this, "starcloud_short.mov");
-  stardust = new Movie(this, "star_cloud_withLight.MP4");
-  //galaxy = new Movie(this, "galaxy.mp4");
+  //stardust = new Movie(this, "star_cloud_LightwithMask.mp4 ");
+  stardust = new Movie(this, "g.mp4 ");
+  galaxy = new Movie(this, "galaxy.mp4");
   stardust.loop();
+  galaxy.loop();
 
   startTime = millis();   //Get time in seconds
 
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(-(Rad+buffer), -(Rad+buffer), (Rad+buffer)*3, (Rad+buffer)*3));//do we need to set a world bound? YES:)
+  physics.setWorldBounds(new Rect(-(Rad+buffer), -(Rad+buffer), (Rad+buffer)*4, (Rad+buffer)*4));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -213,19 +215,40 @@ void draw() {
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
 
+  //pushMatrix();
+  ////placeholder
+  ////draws the animation of stardust
+  //customRotate(0, 0, 0, 0);
+  //rotateY(radians(300));
+  //translate(-Rad, -Rad*0.7, -(Rad+buffer));
+  //image(galaxy, 0, 0);
+  //popMatrix();
+
   pushMatrix();
-  //draws the animation of stardust
+  //draws the earth model
+  rotate(radians(23.44));
+  customRotate(45, 0, 1, 0);
+  //scale(50, 50, 50);
+  //translate(Rad*2, Rad*0.7, -(Rad+buffer));
+  shape(earth, 500, 100);
+  popMatrix();
+
+  pushMatrix();
+  //draws the saturn model
+  rotate(radians(26.73));
+  //customRotate(100, 0, 1, 0);
+  //scale(50, 50, 50);
+  translate(100, 100, 100);
+  shape(saturn, 0, 0);
+  popMatrix();
+
+  pushMatrix();
+  //draws the animation on the left screen
   customRotate(0, 0, 0, 0);
+  rotateY(radians(60));
   translate(-Rad, -Rad*0.7, -(Rad+buffer));
   image(stardust, 0, 0);
   popMatrix();
-
-  //pushMatrix();
-  ////draws the animation of stardust
-  //customRotate(0, 0, 0, 0);
-  ////translate(-Rad, Rad*.5, -(Rad+buffer));
-  //image(galaxy, 0, 0);
-  //popMatrix();
 
   pushMatrix();
   customRotate(0.05, -0.5, -0.2, 0.1);
@@ -233,6 +256,7 @@ void draw() {
   popMatrix();
 
   pushMatrix();
+  //draws the floating elements
   customRotate(0.25, 0.3, -1, -0.5);
   placeElements();
   popMatrix();
