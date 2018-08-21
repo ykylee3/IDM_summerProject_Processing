@@ -1,14 +1,10 @@
 ArrayList<Bird> birds = new ArrayList<Bird>();
-int[] BirdSeeds;
 int offset = 0; //off set value to allow the 'bird'to fly throught the sphere
-int seed;
 
 void initBirds(int n) {
-  BirdSeeds = new int[n];
   //resize the ArrayList
   for (int i = 0; i<n; i++) {
     birds.add(new Bird());
-    BirdSeeds[i] = randomSeeds(nBirdObj);
   }
 }
 
@@ -25,40 +21,14 @@ class Bird {
   PVector direction = new PVector (random(-3, 3), random(-3, 3)); //speed
   int seed;
 
-  void getSeed() {
-  }
 
   void render() {
-    //pushMatrix();
-    //fill(0, 255, 0);
-    //translate(position.x, position.y, position.z);
-    //customRotate(0.5, 0.4, 0.4, 0);
-    //shape(helix, 0, 0);
-    //popMatrix();
-
+    pushMatrix();
+    fill(0, 255, 0);
     translate(position.x, position.y, position.z);
-
-    for (int i=0; i<BirdSeeds.length; i++) {
-      seed = BirdSeeds[i];
-
-      //draws the objs based on the assigned attribute
-      switch(seed) {
-      case 0:
-        //set value of self-rotation of the elements
-        shape(helix, 0, 0);
-        break;
-
-      case 1:
-        //set value of self-rotation of the elements
-        shape(rock1, 0, 0);
-        break;
-
-      case 2:
-        //set value of self-rotation of the elements
-        shape(six, 0, 0);
-        break;
-      }
-    }
+    customRotate(0.5, 0.4, 0.4, 0);
+    shape(helix, 0, 0);
+    popMatrix();    
   }
 
   void step() {

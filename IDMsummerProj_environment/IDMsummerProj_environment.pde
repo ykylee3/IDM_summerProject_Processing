@@ -18,6 +18,7 @@ PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
 Movie stardust;
+Movie galaxy;
 
 //kinect
 KinectPV2 kinect;
@@ -37,7 +38,7 @@ ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
 ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
-Attractor[][] attractors = new Attractor[4][3500];
+Attractor[][] attractors = new Attractor[4][4000];
 VerletPhysics2D physics;
 
 //arduino communication
@@ -51,7 +52,7 @@ PShape threeobjects;
 PShape six;
 PShape alien;
 PShape bowl;
-PShape rock1;
+PShape rock5;
 PShape rock3;
 
 //PShader neon;
@@ -92,12 +93,13 @@ void setup() {
   six = loadShape("six.obj");
   alien = loadShape("alien.obj");
   bowl = loadShape("bowl.obj");
-  rock1 = loadShape("rock1.obj");
   rock3 = loadShape("rock3.obj");
-  
+  rock5 = loadShape("rock5.obj");
+
+
   //stardust = new Movie(this, "starcloud_short.mov");
-  //stardust = new Movie(this, "star_cloud_withLight.MP4");
-  stardust = new Movie(this, "galaxy.mp4");
+  stardust = new Movie(this, "star_cloud_withLight.MP4");
+  galaxy = new Movie(this, "galaxy.mp4");
   stardust.loop();
 
   startTime = millis();   //Get time in seconds
@@ -105,7 +107,7 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(0, 0, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
+  physics.setWorldBounds(new Rect(-(Rad+buffer), -(Rad+buffer), (Rad+buffer)*3, (Rad+buffer)*3));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -219,6 +221,13 @@ void draw() {
   image(stardust, 0, 0);
   popMatrix();
 
+  //pushMatrix();
+  ////draws the animation of stardust
+  //customRotate(0, 0, 0, 0);
+  ////translate(-Rad, Rad*.5, -(Rad+buffer));
+  //image(galaxy, 0, 0);
+  //popMatrix();
+
   pushMatrix();
   customRotate(0.05, -0.5, -0.2, 0.1);
   drawSphereMesh();
@@ -251,7 +260,7 @@ void draw() {
     popMatrix();
   } 
   //draw kinect
-  drawKinect();
+  //drawKinect();
   popMatrix();
 
   //calling explosion
