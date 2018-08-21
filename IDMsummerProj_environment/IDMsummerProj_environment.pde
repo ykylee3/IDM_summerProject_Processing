@@ -99,7 +99,7 @@ void setup() {
 
   //stardust = new Movie(this, "starcloud_short.mov");
   stardust = new Movie(this, "star_cloud_withLight.MP4");
-  galaxy = new Movie(this, "galaxy.mp4");
+  //galaxy = new Movie(this, "galaxy.mp4");
   stardust.loop();
 
   startTime = millis();   //Get time in seconds
@@ -117,21 +117,20 @@ void setup() {
   initBirds(350);
   sphereMeshSetup();
   createMesh4Elements();
-  plantSeed(); //plantseeds for Floating_elements must be called after createMesh4Elements();
-  //plantSeedBirds(); 
+  plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();
 
   ambient.play();
   ambient.loop();
 
   //Kinect Setup
-  //kinect = new KinectPV2(this);
-  //kinect.enableSkeletonColorMap(true);
-  //kinect.init();
+  kinect = new KinectPV2(this);
+  kinect.enableSkeletonColorMap(true);
+  kinect.init();
 
   ////serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -247,7 +246,7 @@ void draw() {
   popMatrix();
 
   pushMatrix();
-  //updating physics
+  //updating physics of particles (kinect interaction)
   physics.update ();
   popMatrix();
 
@@ -260,7 +259,7 @@ void draw() {
     popMatrix();
   } 
   //draw kinect
-  //drawKinect();
+  drawKinect();
   popMatrix();
 
   //calling explosion
@@ -287,14 +286,14 @@ void movieEvent(Movie m) {
 }
 
 //serial event from arduino
-//void serialEvent( Serial p ) {
-//  String val = p.readString();
-//  if ( val != null ) {
-//    int number = int( trim( val ) ); //converting string to int
-//    println( "plasma globe " + number );
-//    inputSignal( number );
-//  }
-//}
+void serialEvent( Serial p ) {
+  String val = p.readString();
+  if ( val != null ) {
+    int number = int( trim( val ) ); //converting string to int
+    println( "plasma globe " + number );
+    inputSignal( number );
+  }
+}
 
 //MOOC ARDUINO
 void keyPressed() {
