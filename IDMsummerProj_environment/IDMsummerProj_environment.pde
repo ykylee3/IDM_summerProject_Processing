@@ -116,6 +116,7 @@ void setup() {
   }
 
   initBirds(350);
+  initPreds(7);
   sphereMeshSetup();
   createMesh4Elements();
   plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();

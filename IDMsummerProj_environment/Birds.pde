@@ -1,10 +1,18 @@
 ArrayList<Bird> birds = new ArrayList<Bird>();
+ArrayList<Predators> pred = new ArrayList<Predators>();
 int offset = 0; //off set value to allow the 'bird'to fly throught the sphere
 
 void initBirds(int n) {
   //resize the ArrayList
   for (int i = 0; i<n; i++) {
     birds.add(new Bird());
+  }
+}
+
+void initPreds(int n) {
+  //resize the ArrayList
+  for (int i = 0; i<n; i++) {
+    pred.add(new Predators());
   }
 }
 
@@ -27,9 +35,9 @@ class Bird {
     fill(0, 255, 0);
     translate(position.x, position.y, position.z);
     customRotate(0.5, 0.4, 0.4, 0);
-    scale(0.5,0.5,0.5);
+    scale(0.5, 0.5, 0.5);
     shape(alien, 0, 0);
-    popMatrix();    
+    popMatrix();
   }
 
   void step() {
@@ -72,4 +80,8 @@ class Bird {
       position.z =offset;
     }
   }
+}
+
+class Predators {
+  PVector position = new PVector(random(-offset, width+offset), random(-offset, height+offset), random(-(offset), Rad+offset));
 }
