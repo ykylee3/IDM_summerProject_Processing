@@ -68,7 +68,7 @@ void placeElements() {
     case 3:
       //set value of self-rotation of the elements
       pushMatrix();
-      customRotate(0.8, 0.7, 0.6, 0.4);
+      customRotate(0.8, 0.7, 0.6, 0.7);
       scale(4, 4, 4);
       shape(rock5, 0, 0);
       popMatrix();

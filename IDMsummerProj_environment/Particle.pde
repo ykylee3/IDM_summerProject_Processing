@@ -9,7 +9,7 @@ class Particle extends VerletParticle2D {
     super(loc);
     r = 4;
     physics.addParticle(this);
-    physics.addBehavior(new AttractionBehavior(this, r*random(10), -1));
+    physics.addBehavior(new AttractionBehavior(this, r*random(6), -1));
   }
 
 
