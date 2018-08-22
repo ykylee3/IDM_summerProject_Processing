@@ -67,7 +67,6 @@ int[] elementCache;
 
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
-int nBirdObj = 3;    //Total number of varaieties for bird elements
 int nFloatObj = 4;   //Total number of varaieties for floating elements
 
 float Rad = 1000; //The to-be-formed sphere's (the 'dome' container) radius
@@ -100,7 +99,7 @@ void setup() {
 
 
   //galaxy = new Movie(this, "g2.mp4 ");
-  galaxy = new Movie(this, "galaxy2.mp4 ");
+  galaxy = new Movie(this, "galaxy3.mp4 ");
   galaxy.loop();
 
   startTime = millis();   //Get time in seconds
@@ -115,7 +114,8 @@ void setup() {
     particles.add(new Particle(new Vec2D(random(Rad*2), random(Rad*2))));
   }
 
-  initBirds(350);
+  initBirds(200);
+  initPreds(30);
   sphereMeshSetup();
   createMesh4Elements();
   plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();
@@ -188,20 +188,8 @@ void pre() {
 void draw() {
   background(0);
 
-  lightFalloff(1, 0.3, 0.4); 
-  lightSpecular(255, 255, 255);
-
   //reset coordinates
   camera();
-
-  //set coordinate/direction of spotlight to follow camera
-  pushMatrix();
-  //set ambient DNA
-  ambientLight(255, 255, 255);
-  //set rotation attributes for the directional light
-  customRotate(0, 0, 0, 0);
-  directionalLight(255, 255, 255, 0, 0, -1);
-  popMatrix();
 
   //manually set start the peasy cam
   cam.feed();
@@ -213,6 +201,27 @@ void draw() {
   line(0, -300, 0, 0, 300, 0); //y
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
+
+  pushMatrix();
+  //draws the galaxy animation on the left screen
+  customRotate(0, 0, 0, 0);
+  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
+  rotateY(radians(90));
+  //rotateX(-radians(20));
+  image(galaxy, 0, 0);
+  popMatrix();
+
+  lightFalloff(1, 0.3, 0.4); 
+  lightSpecular(255, 255, 255);
+  
+  //set coordinate/direction of spotlight to follow camera
+  pushMatrix();
+  //set ambient 
+  ambientLight(255, 255, 255);
+  //set rotation attributes for the directional light
+  customRotate(0, 0, 0, 0);
+  directionalLight(255, 255, 255, 0, 0, -1);
+  popMatrix();
 
   pushMatrix();
   //draws the earth model
@@ -229,15 +238,6 @@ void draw() {
   customRotate(1, 0, 1, 0);
   scale(2.5, 2.5, 2.5);
   shape(jupiter, 0, 0);
-  popMatrix();
-
-  pushMatrix();
-  //draws the galaxy animation on the left screen
-  customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
-  rotateY(radians(90));
-  rotateX(-radians(20));
-  image(galaxy, 0, 0);
   popMatrix();
 
   pushMatrix();
@@ -292,6 +292,7 @@ void draw() {
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
+  drawPreds();
 }
 
 //reads new frame of the movie 
