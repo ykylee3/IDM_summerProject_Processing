@@ -38,13 +38,14 @@ ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
 ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
-Attractor[][] attractors = new Attractor[4][3000];
+Attractor[][] attractors = new Attractor[4][1500];
 VerletPhysics2D physics;
 
 //arduino communication
 Serial myPort;  // Create object from Serial class
 
 //shapes
+PShape alien;
 PShape helix;
 PShape virus;
 PShape DNA;
@@ -78,7 +79,7 @@ float meshBeatRate = 4300;
 
 void setup() {
   //fullScreen(P3D, SPAN);
-  size(1200, 860, P3D);
+  size(1024, 560, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -86,6 +87,7 @@ void setup() {
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
   ambient = minim.loadFile("ambience_combine.mp3");
+  alien = loadShape("alien.obj");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");
@@ -97,7 +99,8 @@ void setup() {
   jupiter = loadShape("jupiter.obj");
 
 
-  galaxy = new Movie(this, "g2.mp4 ");
+  //galaxy = new Movie(this, "g2.mp4 ");
+  galaxy = new Movie(this, "galaxy2.mp4 ");
   galaxy.loop();
 
   startTime = millis();   //Get time in seconds
@@ -231,9 +234,9 @@ void draw() {
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -(Rad/2), Rad*1.5);
+  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
   rotateY(radians(90));
-  rotateX(radians(20));
+  rotateX(-radians(20));
   image(galaxy, 0, 0);
   popMatrix();
 

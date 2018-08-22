@@ -9,7 +9,7 @@ class Particle extends VerletParticle2D {
     super(loc);
     r = 4;
     physics.addParticle(this);
-    physics.addBehavior(new AttractionBehavior(this, r*random(15), -1));
+    physics.addBehavior(new AttractionBehavior(this, r*random(10), -1));
   }
 
 
@@ -18,7 +18,7 @@ class Particle extends VerletParticle2D {
     fill (255, 0, 0);
     //translate(x, y);
     //sphere(r*2);
-    shape(six, x, y);//test with helix shape as the particles
+    shape(six, x, y);
     popMatrix();
   }
 }
