@@ -18,16 +18,18 @@ void drawBirds() {
 //create the class Bird
 class Bird {
   PVector position = new PVector(random(-offset, width+offset), random(-offset, height+offset), random(-(offset), Rad+offset));
-  PVector direction = new PVector(random(-3, 3), random(-3, 3), random(-3, 3)); //speed
+  PVector direction = new PVector (random(-2, 2), random(-2, 2)); //speed
+  int seed;
+
 
   void render() {
     pushMatrix();
     fill(0, 255, 0);
     translate(position.x, position.y, position.z);
     customRotate(0.5, 0.4, 0.4, 0);
-    shape(helix, 0, 0);
-    //box(8);
-    popMatrix();
+    scale(0.5,0.5,0.5);
+    shape(alien, 0, 0);
+    popMatrix();    
   }
 
   void step() {

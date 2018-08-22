@@ -11,10 +11,14 @@ import KinectPV2.*;
 
 //serial lib
 import processing.serial.*;
+import processing.video.*;
+
 
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
+Movie stardust;
+Movie galaxy;
 
 //kinect
 KinectPV2 kinect;
@@ -34,20 +38,23 @@ ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
 ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
-Attractor[][] attractors = new Attractor[4][500];
+Attractor[][] attractors = new Attractor[4][1500];
 VerletPhysics2D physics;
 
 //arduino communication
 Serial myPort;  // Create object from Serial class
 
 //shapes
+PShape alien;
 PShape helix;
 PShape virus;
 PShape DNA;
 PShape threeobjects;
 PShape six;
-PShape alien;
-PShape starcloud;
+PShape bowl;
+PShape rock5;
+PShape earth;
+PShape jupiter;
 
 //PShader neon;
 
@@ -61,7 +68,7 @@ int[] elementCache;
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
 int nBirdObj = 3;    //Total number of varaieties for bird elements
-int nFloatObj = 3;   //Total number of varaieties for floating elements
+int nFloatObj = 4;   //Total number of varaieties for floating elements
 
 float Rad = 1000; //The to-be-formed sphere's (the 'dome' container) radius
 float buffer = 200; //distance between the shpere mesh and the floating elements
@@ -71,10 +78,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  fullScreen(P3D, SPAN);
-
-  // the random seed must be identical for all clients
-  randomSeed(1);
+  //fullScreen(P3D, SPAN);
+  size(1024, 560, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -82,20 +87,28 @@ void setup() {
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
   ambient = minim.loadFile("ambience_combine.mp3");
+  alien = loadShape("alien.obj");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
   DNA = loadShape("DNA.obj");
   threeobjects = loadShape("threeobjects.obj");
   six = loadShape("six.obj");
-  alien = loadShape("alien.obj");
-  //starcloud = loadShape("starcloud.obj");
+  bowl = loadShape("bowl.obj");
+  rock5 = loadShape("rock5.obj");
+  earth = loadShape("earth2.obj");
+  jupiter = loadShape("jupiter.obj");
+
+
+  //galaxy = new Movie(this, "g2.mp4 ");
+  galaxy = new Movie(this, "galaxy2.mp4 ");
+  galaxy.loop();
 
   startTime = millis();   //Get time in seconds
 
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(0, 0, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
+  physics.setWorldBounds(new Rect(-(Rad+buffer), -(Rad+buffer), (Rad+buffer)*4, (Rad+buffer)*4));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -105,7 +118,7 @@ void setup() {
   initBirds(350);
   sphereMeshSetup();
   createMesh4Elements();
-  plantSeed(); //must be called after createMesh4Elements();
+  plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();
 
   ambient.play();
   ambient.loop();
@@ -174,7 +187,7 @@ void pre() {
 
 void draw() {
   background(0);
-  
+
   lightFalloff(1, 0.3, 0.4); 
   lightSpecular(255, 255, 255);
 
@@ -202,11 +215,38 @@ void draw() {
   line(0, 0, -300, 0, 0, 300); //z
 
   pushMatrix();
+  //draws the earth model
+  rotate(radians(23.44));
+  translate(200, -(Rad*0.3), -(Rad+buffer));
+  customRotate(0.8, 0, 1, 0);
+  shape(earth, 0, 0);
+  popMatrix();
+
+  pushMatrix();
+  //draws the saturn model
+  rotate(radians(26.73));
+  translate((Rad+buffer*2), -200, 100);
+  customRotate(1, 0, 1, 0);
+  scale(2.5, 2.5, 2.5);
+  shape(jupiter, 0, 0);
+  popMatrix();
+
+  pushMatrix();
+  //draws the galaxy animation on the left screen
+  customRotate(0, 0, 0, 0);
+  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
+  rotateY(radians(90));
+  rotateX(-radians(20));
+  image(galaxy, 0, 0);
+  popMatrix();
+
+  pushMatrix();
   customRotate(0.05, -0.5, -0.2, 0.1);
   drawSphereMesh();
   popMatrix();
 
   pushMatrix();
+  //draws the floating elements
   customRotate(0.25, 0.3, -1, -0.5);
   placeElements();
   popMatrix();
@@ -220,7 +260,7 @@ void draw() {
   popMatrix();
 
   pushMatrix();
-  //updating physics
+  //updating physics of particles (kinect interaction)
   physics.update ();
   popMatrix();
 
@@ -252,6 +292,11 @@ void draw() {
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
+}
+
+//reads new frame of the movie 
+void movieEvent(Movie m) {
+  m.read();
 }
 
 //serial event from arduino
