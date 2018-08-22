@@ -100,7 +100,7 @@ void setup() {
 
 
   //galaxy = new Movie(this, "g2.mp4 ");
-  galaxy = new Movie(this, "galaxy2.mp4 ");
+  galaxy = new Movie(this, "galaxy3.mp4 ");
   galaxy.loop();
 
   startTime = millis();   //Get time in seconds
