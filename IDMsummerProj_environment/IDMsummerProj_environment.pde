@@ -38,7 +38,7 @@ ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
 ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 
 //attractor
-Attractor[][] attractors = new Attractor[4][4000];
+Attractor[][] attractors = new Attractor[4][3000];
 VerletPhysics2D physics;
 
 //arduino communication
@@ -53,7 +53,7 @@ PShape six;
 PShape bowl;
 PShape rock5;
 PShape earth;
-PShape saturn;
+PShape jupiter;
 
 //PShader neon;
 
@@ -77,8 +77,8 @@ float now = millis();
 float meshBeatRate = 4300;
 
 void setup() {
-  fullScreen(P3D, SPAN);
-  //size(1200, 860, P3D);
+  //fullScreen(P3D, SPAN);
+  size(1200, 860, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -94,14 +94,10 @@ void setup() {
   bowl = loadShape("bowl.obj");
   rock5 = loadShape("rock5.obj");
   earth = loadShape("earth2.obj");
-  saturn = loadShape("Saturn.obj");
+  jupiter = loadShape("jupiter.obj");
 
 
-  //stardust = new Movie(this, "starcloud_short.mov");
-  //stardust = new Movie(this, "star_cloud_LightwithMask.mp4 ");
-  stardust = new Movie(this, "g.mp4 ");
-  galaxy = new Movie(this, "galaxy.mp4");
-  stardust.loop();
+  galaxy = new Movie(this, "g2.mp4 ");
   galaxy.loop();
 
   startTime = millis();   //Get time in seconds
@@ -215,39 +211,30 @@ void draw() {
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
 
-  //pushMatrix();
-  ////placeholder
-  ////draws the animation of stardust
-  //customRotate(0, 0, 0, 0);
-  //rotateY(radians(300));
-  //translate(-Rad, -Rad*0.7, -(Rad+buffer));
-  //image(galaxy, 0, 0);
-  //popMatrix();
-
   pushMatrix();
   //draws the earth model
   rotate(radians(23.44));
-  customRotate(45, 0, 1, 0);
-  //scale(50, 50, 50);
-  //translate(Rad*2, Rad*0.7, -(Rad+buffer));
-  shape(earth, 500, 100);
+  translate(200, -(Rad*0.3), -(Rad+buffer));
+  customRotate(0.8, 0, 1, 0);
+  shape(earth, 0, 0);
   popMatrix();
 
   pushMatrix();
   //draws the saturn model
   rotate(radians(26.73));
-  //customRotate(100, 0, 1, 0);
-  //scale(50, 50, 50);
-  translate(100, 100, 100);
-  shape(saturn, 0, 0);
+  translate((Rad+buffer*2), -200, 100);
+  customRotate(1, 0, 1, 0);
+  scale(2.5, 2.5, 2.5);
+  shape(jupiter, 0, 0);
   popMatrix();
 
   pushMatrix();
-  //draws the animation on the left screen
+  //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  rotateY(radians(60));
-  translate(-Rad, -Rad*0.7, -(Rad+buffer));
-  image(stardust, 0, 0);
+  translate(-(Rad*2+buffer), -(Rad/2), Rad*1.5);
+  rotateY(radians(90));
+  rotateX(radians(20));
+  image(galaxy, 0, 0);
   popMatrix();
 
   pushMatrix();

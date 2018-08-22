@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib Saturn.mtl
+mtllib jupiter.mtl
 g Saturn:default1
 v 0.000000 119.026899 0.000000
 v 0.000000 118.810780 -6.877252
