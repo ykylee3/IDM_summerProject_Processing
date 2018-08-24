@@ -100,7 +100,6 @@ void playTrack() {
       setOrder();
     } else {
       if (tracksPlayed<number.length) {
-
         println("in the loop: " + result);
         if (number[x]==1) {
           sequence0.play();
@@ -155,9 +154,11 @@ void playTrack() {
           time=7000;
         }
         tracksPlayed+=1;
+        if (tracksPlayed==number.length) {
+          result = listComplete(tracksPlayed);
+          tracksPlayed=0;
+        }
         delay(int(time));
-      } else {
-        tracksPlayed=0;
       }
     }
   }
