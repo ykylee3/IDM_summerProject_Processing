@@ -129,9 +129,9 @@ void setup() {
   kinect.init();
 
   ////serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -213,7 +213,7 @@ void draw() {
 
   lightFalloff(1, 0.3, 0.4); 
   lightSpecular(255, 255, 255);
-  
+
   //set coordinate/direction of spotlight to follow camera
   pushMatrix();
   //set ambient 
@@ -276,6 +276,7 @@ void draw() {
   drawKinect();
   popMatrix();
 
+  pushMatrix();
   //calling explosion
   for ( float coordArray[] : particles_explosion ) {    
     explodeParticle( coordArray[0], coordArray[1] );
@@ -289,6 +290,7 @@ void draw() {
   }
   //cleaning array
   particles_creation.clear();
+  popMatrix();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
