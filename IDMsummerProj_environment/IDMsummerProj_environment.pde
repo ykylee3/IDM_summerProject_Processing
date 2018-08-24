@@ -19,6 +19,7 @@ Minim minim;
 AudioPlayer ambient;
 Movie galaxy;
 Movie creation1;
+Movie creation2;
 
 //kinect
 KinectPV2 kinect;
@@ -77,6 +78,9 @@ float now = millis();
 float meshBeatRate = 4300;
 
 boolean playCreation1 = false;
+boolean playCreation2 = false;
+boolean playDestruction1 = false;
+boolean playDestruction2 = false;
 
 void setup() {
   //fullScreen(P3D, SPAN);
@@ -103,10 +107,12 @@ void setup() {
   galaxy = new Movie(this, "g2.mp4 ");
   galaxy.loop();
   //galaxy = new Movie(this, "galaxy3.mp4 ");
-  creation1 = new Movie(this, "creationwithaudio.mp4 ");
-  //creation.resize(0, height);
+  creation1 = new Movie(this, "creationwithsound_2.mp4 ");
+  creation2 = new Movie(this, "creationwithaudio.mp4 ");
   creation1.loop();
   creation1.pause();
+  creation2.loop();
+  creation2.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -220,15 +226,30 @@ void draw() {
   popMatrix();
 
   pushMatrix();
+  //draws the creation1 animation (on the left)
   rotateY(radians(30));
-  translate(-Rad*2, -Rad, -Rad*1.5);
-  scale(1.5, 1.5);
+  translate(-Rad*2, -Rad*0.5, -Rad*1.5);
+  scale(1.3, 1.3);
   image(creation1, 0, 0);
   if (creation1.time() >= creation1.duration()-0.2) {
     //stops the video when a play is complete
     creation1.pause();
     creation1.jump(0); //rewind the video for the next play event
     playCreation1 = false;
+  }
+  popMatrix();
+
+  pushMatrix();
+  //draws the creation2 animation (on the right)
+  rotateY(-radians(30));
+  translate(-Rad*1.5, -Rad*1.2, -Rad*2);
+  scale(1.5, 1.5);
+  image(creation2, 0, 0);
+  if (creation2.time() >= creation2.duration()-0.2) {
+    //stops the video when a play is complete
+    creation2.pause();
+    creation2.jump(0); //rewind the video for the next play event
+    playCreation2 = false;
   }
   popMatrix();
 
@@ -346,6 +367,10 @@ void keyPressed() {
 
   case 50:
     inputSignal( 2 );
+    if (!playCreation2) {
+      creation2.play();
+      playCreation2 = true;
+    }
     break;
 
   case 51:
