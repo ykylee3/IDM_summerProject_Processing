@@ -18,7 +18,7 @@ PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
 Movie galaxy;
-Movie creation;
+Movie creation1;
 
 //kinect
 KinectPV2 kinect;
@@ -76,7 +76,7 @@ float startTime;
 float now = millis();
 float meshBeatRate = 4300;
 
-boolean playCreation = false;
+boolean playCreation1 = false;
 
 void setup() {
   //fullScreen(P3D, SPAN);
@@ -103,10 +103,10 @@ void setup() {
   galaxy = new Movie(this, "g2.mp4 ");
   galaxy.loop();
   //galaxy = new Movie(this, "galaxy3.mp4 ");
-  creation = new Movie(this, "creationwithaudio.mp4 ");
+  creation1 = new Movie(this, "creationwithaudio.mp4 ");
   //creation.resize(0, height);
-  creation.loop();
-  creation.pause();
+  creation1.loop();
+  creation1.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -223,8 +223,8 @@ void draw() {
   rotateY(radians(30));
   translate(-Rad*2, -Rad, -Rad*1.5);
   scale(1.5, 1.5);
-  image(creation, 0, 0);
-  if (creation.time() >= creation.duration()-0.2) {
+  image(creation1, 0, 0);
+  if (creation1.time() >= creation1.duration()-0.2) {
     //stops the video when a play is complete
     creation.pause();
     creation.jump(0); //rewind the video for the next play event
@@ -338,9 +338,9 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
-    if (!playCreation) {
-      creation.play();
-      playCreation = true;
+    if (!playCreation1) {
+      creation1.play();
+      playCreation1 = true;
     }
     break;
 
