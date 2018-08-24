@@ -226,9 +226,9 @@ void draw() {
   image(creation1, 0, 0);
   if (creation1.time() >= creation1.duration()-0.2) {
     //stops the video when a play is complete
-    creation.pause();
-    creation.jump(0); //rewind the video for the next play event
-    playCreation = false;
+    creation1.pause();
+    creation1.jump(0); //rewind the video for the next play event
+    playCreation1 = false;
   }
   popMatrix();
 
