@@ -82,6 +82,7 @@ void setOrder() {
     } while (!repeat);
   }
   result = false;
+  delay(int(time));
 }
 
 void playTrack() {
@@ -94,11 +95,11 @@ void playTrack() {
       println("in the loop: " + result);
       count = 0;
       finalTrack = -1;
-      tracksPlayed = 0;
+      //tracksPlayed = 0;
       repeat = false;
       setOrder();
     } else {
-      if (tracksPlayed<number.length-1) {
+      if (tracksPlayed<number.length) {
 
         println("in the loop: " + result);
         if (number[x]==1) {
@@ -155,6 +156,8 @@ void playTrack() {
         }
         tracksPlayed+=1;
         delay(int(time));
+      } else {
+        tracksPlayed=0;
       }
     }
   }
@@ -164,7 +167,7 @@ boolean listComplete(int n) {
   if (n<number.length-1 && n>0) {
     result = false;
   } 
-  if (n==number.length-1) {
+  if (n==number.length) {
     result = true;
   }
   return result;
