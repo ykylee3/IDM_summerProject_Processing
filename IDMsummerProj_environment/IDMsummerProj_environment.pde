@@ -17,8 +17,8 @@ import processing.video.*;
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
-Movie stardust;
 Movie galaxy;
+Movie creation;
 
 //kinect
 KinectPV2 kinect;
@@ -76,6 +76,8 @@ float startTime;
 float now = millis();
 float meshBeatRate = 4300;
 
+boolean playCreation = false;
+
 void setup() {
   //fullScreen(P3D, SPAN);
   size(1024, 560, P3D);
@@ -98,9 +100,13 @@ void setup() {
   jupiter = loadShape("jupiter.obj");
 
 
-  //galaxy = new Movie(this, "g2.mp4 ");
-  galaxy = new Movie(this, "galaxy3.mp4 ");
+  galaxy = new Movie(this, "g2.mp4 ");
   galaxy.loop();
+  //galaxy = new Movie(this, "galaxy3.mp4 ");
+  creation = new Movie(this, "creationwithaudio.mp4 ");
+  //creation.resize(0, height);
+  creation.play();
+  creation.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -129,9 +135,9 @@ void setup() {
   kinect.init();
 
   ////serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -202,6 +208,8 @@ void draw() {
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
 
+  //animations to be placed before initializing the light
+  //to avoid being affected with the specular settings
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
@@ -211,9 +219,14 @@ void draw() {
   image(galaxy, 0, 0);
   popMatrix();
 
+  pushMatrix();
+  translate(-Rad, -Rad, -Rad*1.5);
+  image(creation, 0, 0);
+  popMatrix();
+
   lightFalloff(1, 0.3, 0.4); 
   lightSpecular(255, 255, 255);
-  
+
   //set coordinate/direction of spotlight to follow camera
   pushMatrix();
   //set ambient 
@@ -276,6 +289,7 @@ void draw() {
   drawKinect();
   popMatrix();
 
+  pushMatrix();
   //calling explosion
   for ( float coordArray[] : particles_explosion ) {    
     explodeParticle( coordArray[0], coordArray[1] );
@@ -289,6 +303,7 @@ void draw() {
   }
   //cleaning array
   particles_creation.clear();
+  popMatrix();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
@@ -315,8 +330,15 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
+    if (playCreation) {
+      creation.pause();
+      playCreation = false;
+    } else {
+      creation.play();
+      playCreation = true;
+    }
     break;
-
+    
   case 50:
     inputSignal( 2 );
     break;
