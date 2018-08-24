@@ -80,7 +80,7 @@ boolean playCreation = false;
 
 void setup() {
   //fullScreen(P3D, SPAN);
-  size(1024, 560, P3D);
+  size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -192,7 +192,7 @@ void pre() {
 }
 
 void draw() {
-  background(255);
+  background(0);
 
   //reset coordinates
   camera();
@@ -213,14 +213,16 @@ void draw() {
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -(Rad*1.3), Rad+buffer);
+  translate(-(Rad*2+buffer), -(Rad*1.3), Rad);
   rotateY(radians(90));
   //rotateX(-radians(20));
   image(galaxy, 0, 0);
   popMatrix();
 
   pushMatrix();
-  translate(-Rad*1.5, -Rad*1.5, -Rad*1.5);
+  rotateY(radians(30));
+  translate(-Rad*2, -Rad, -Rad*1.5);
+  scale(1.5, 1.5);
   image(creation, 0, 0);
   if (creation.time() >= creation.duration()-0.2) {
     //stops the video when a play is complete
