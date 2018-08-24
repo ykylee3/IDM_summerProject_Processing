@@ -83,8 +83,8 @@ boolean playDestruction1 = false;
 boolean playDestruction2 = false;
 
 void setup() {
-  fullScreen(P3D, SPAN);
-  //size(1280, 720, P3D);
+  //fullScreen(P3D, SPAN);
+  size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -219,7 +219,7 @@ void draw() {
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -Rad*0.4, Rad);
+  translate(-(2200), -400, 1000);
   rotateY(radians(90));
   image(galaxy, 0, 0);
   popMatrix();
@@ -227,7 +227,7 @@ void draw() {
   pushMatrix();
   //draws the creation1 animation (on the left)
   rotateY(radians(30));
-  translate(-Rad*2, -Rad*0.2, -Rad*1.5);
+  translate(-2000, -200, -1500);
   //scale(1.3, 1.3);
   image(creation1, 0, 0);
   if (creation1.time() >= creation1.duration()-0.2) {
@@ -241,7 +241,7 @@ void draw() {
   pushMatrix();
   //draws the creation2 animation (on the right)
   rotateY(-radians(30));
-  translate(-Rad*1.5, -Rad, -Rad*2);
+  translate(-1500, -1000, -2000);
   scale(1.5, 1.5);
   image(creation2, 0, 0);
   if (creation2.time() >= creation2.duration()-0.2) {
@@ -267,7 +267,7 @@ void draw() {
   pushMatrix();
   //draws the earth model
   rotate(radians(23.44));
-  translate(350, -(Rad*0.3), -(Rad+buffer));
+  translate(350, -300, -1300);
   customRotate(0.8, 0, 1, 0);
   shape(earth, 0, 0);
   popMatrix();
@@ -275,7 +275,7 @@ void draw() {
   pushMatrix();
   //draws the saturn model
   rotate(radians(26.73));
-  translate((Rad+buffer*2), -200, 100);
+  translate(2200, -200, 100);
   customRotate(1, 0, 1, 0);
   scale(2.5, 2.5, 2.5);
   shape(jupiter, 0, 0);
@@ -307,7 +307,7 @@ void draw() {
 
   pushMatrix();
   //display particles
-  translate(-Rad, -Rad, -(Rad*0.75));
+  translate(-1000, -1000, -750);
   for (Particle p : particles) {
     pushMatrix();
     p.display();
@@ -333,7 +333,7 @@ void draw() {
   particles_creation.clear();
   popMatrix();
 
-  translate(-width/2, -height/2, -Rad);
+  translate(-width/2, -height/2, -1000);
   drawBirds();
   drawPreds();
 }
