@@ -17,8 +17,10 @@ import processing.video.*;
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
-Movie stardust;
+
 Movie galaxy;
+Movie creation1;
+Movie creation2;
 
 //kinect
 KinectPV2 kinect;
@@ -76,6 +78,9 @@ float startTime;
 float now = millis();
 float meshBeatRate = 4300;
 
+boolean playCreation1 = false;
+boolean playCreation2 = false;
+
 void setup() {
   //fullScreen(P3D, SPAN);
   size(1024, 560, P3D);
@@ -101,6 +106,10 @@ void setup() {
   //galaxy = new Movie(this, "g2.mp4 ");
   galaxy = new Movie(this, "galaxy3.mp4 ");
   galaxy.loop();
+  creation1 = new Movie(this, "creationwithsound_2.mp4 ");
+  //creation2 = new Movie(this, "creationwithaudio.mp4 ");
+  creation1.loop();
+  creation1.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -202,13 +211,28 @@ void draw() {
   stroke(0, 0, 255);
   line(0, 0, -300, 0, 0, 300); //z
 
+  //animations to be placed before initializing the light
+  //to avoid being affected with the specular settings
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
+  translate(-(Rad*2+buffer), -Rad*0.4, Rad);
   rotateY(radians(90));
-  //rotateX(-radians(20));
   image(galaxy, 0, 0);
+  popMatrix();
+
+  pushMatrix();
+  //draws the creation1 animation (on the left)
+  rotateY(radians(30));
+  translate(-Rad*2, -Rad*0.2, -Rad*1.5);
+  //scale(1.3, 1.3);
+  image(creation1, 0, 0);
+  if (creation1.time() >= creation1.duration()-0.2) {
+    //stops the video when a play is complete
+    creation1.pause();
+    creation1.jump(0); //rewind the video for the next play event
+    playCreation1 = false;
+  }
   popMatrix();
 
   lightFalloff(1, 0.3, 0.4); 
@@ -317,6 +341,11 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
+    inputSignal( 1 );
+    if (!playCreation1) {
+      creation1.play();
+      playCreation1 = true;
+    }
     break;
 
   case 50:
