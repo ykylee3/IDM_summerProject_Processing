@@ -105,7 +105,7 @@ void setup() {
   //galaxy = new Movie(this, "galaxy3.mp4 ");
   creation = new Movie(this, "creationwithaudio.mp4 ");
   //creation.resize(0, height);
-  creation.play();
+  creation.loop();
   creation.pause();
 
   startTime = millis();   //Get time in seconds
@@ -192,7 +192,7 @@ void pre() {
 }
 
 void draw() {
-  background(0);
+  background(255);
 
   //reset coordinates
   camera();
@@ -213,15 +213,21 @@ void draw() {
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -(Rad*1.3), Rad*1.5);
+  translate(-(Rad*2+buffer), -(Rad*1.3), Rad+buffer);
   rotateY(radians(90));
   //rotateX(-radians(20));
   image(galaxy, 0, 0);
   popMatrix();
 
   pushMatrix();
-  translate(-Rad, -Rad, -Rad*1.5);
+  translate(-Rad*1.5, -Rad*1.5, -Rad*1.5);
   image(creation, 0, 0);
+  if (creation.time() >= creation.duration()-0.2) {
+    //stops the video when a play is complete
+    creation.pause();
+    creation.jump(0); //rewind the video for the next play event
+    playCreation = false;
+  }
   popMatrix();
 
   lightFalloff(1, 0.3, 0.4); 
@@ -330,15 +336,12 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
-    if (playCreation) {
-      creation.pause();
-      playCreation = false;
-    } else {
+    if (!playCreation) {
       creation.play();
       playCreation = true;
     }
     break;
-    
+
   case 50:
     inputSignal( 2 );
     break;
