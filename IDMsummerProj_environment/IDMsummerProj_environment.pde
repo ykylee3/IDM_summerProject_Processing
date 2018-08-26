@@ -17,13 +17,19 @@ import processing.video.*;
 PeasyCam cam;
 Minim minim;
 AudioPlayer ambient;
+AudioPlayer globeEffect;
+AudioPlayer kinectEffect;
 
 Movie galaxy;
 Movie creation1;
 Movie creation2;
 
+//arduino communication
+Serial myPort;  // Create object from Serial class
+
 //kinect
 KinectPV2 kinect;
+int numUsers = 0;
 
 //main particles arraylist
 ArrayList<Particle> particles;
@@ -42,9 +48,6 @@ ArrayList<float[]> particles_creation = new ArrayList<float[]>();
 //attractor
 Attractor[][] attractors = new Attractor[4][1500];
 VerletPhysics2D physics;
-
-//arduino communication
-Serial myPort;  // Create object from Serial class
 
 //shapes
 PShape alien;
@@ -91,6 +94,8 @@ void setup() {
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
   minim = new Minim(this);
   ambient = minim.loadFile("ambience_combine.mp3");
+  globeEffect = minim.loadFile("globe_2_new.mp3");
+  kinectEffect = minim.loadFile("kinect_2_new.mp3");
   alien = loadShape("alien.obj");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
@@ -101,7 +106,6 @@ void setup() {
   rock5 = loadShape("rock5.obj");
   earth = loadShape("earth2.obj");
   jupiter = loadShape("jupiter.obj");
-
 
   //galaxy = new Movie(this, "g2.mp4 ");
   galaxy = new Movie(this, "galaxy3.mp4 ");
@@ -137,10 +141,10 @@ void setup() {
   kinect.enableSkeletonColorMap(true);
   kinect.init();
 
-  ////serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  //serial communication
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -282,6 +286,17 @@ void draw() {
   customRotate(0, 0, 0, 0);
   sphere(20);
   popMatrix();
+
+  //to get the number of users and for each new user play the sound effect
+  int getUsers = int(kinect.getNumOfUsers());
+  if (getUsers > numUsers) {
+    kinectEffect.play();
+    kinectEffect.rewind();
+    println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
+  }
+  numUsers = int(kinect.getNumOfUsers());
+  println(numUsers);
+  println(getUsers);
 
   pushMatrix();
   //updating physics of particles (kinect interaction)
