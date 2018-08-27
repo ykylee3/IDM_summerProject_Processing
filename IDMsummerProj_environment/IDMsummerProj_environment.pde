@@ -312,7 +312,7 @@ void draw() {
 
   pushMatrix();
   //draws the destruction1 animation (on the right)
-  translate((Rad+buffer*2.5), -(Rad*0.5), -Rad*1.8);
+  translate((Rad+buffer*2.5), -(Rad*0.8), -Rad*1.5);
   rotateY(-radians(90));
   rotateX(radians(10));
   image(destruction1, 0, 0);
@@ -360,8 +360,9 @@ void draw() {
   pushMatrix();
   //draws the jupiter model
   rotate(radians(26.73));
-  translate(Rad+buffer/2, -(Rad*0.5), -buffer*3);
+  translate(Rad+buffer/2, -(Rad*0.5), -buffer*2);
   customRotate(1, 0, 1, 0);
+  scale(0.4, 0.5, 0.4);
   shape(jupiter, 0, 0);
   popMatrix();
 
