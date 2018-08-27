@@ -112,7 +112,7 @@ void setup() {
   sphereDetail(8);
 
   minim = new Minim(this);
-  
+
   ////loads voice over files
   //sequence0 = minim.loadFile("1_3.mp3");
   //sequence1 = minim.loadFile("2_3.mp3");
@@ -127,7 +127,7 @@ void setup() {
   //sequence10 = minim.loadFile("11_3.mp3");
   //sequence11 = minim.loadFile("12_3.mp3");
   //sequence12 = minim.loadFile("13_3.mp3");
-  
+
   ////Creates a playlist of voice overs
   //setOrder();
 
@@ -490,44 +490,44 @@ void keyPressed() {
     }
     break;
 
-  //case 32:
-  //  if (!playVO) {
-  //    playVO = true;
-  //  } else {
-  //    playVO=false;
-  //  }
-  //  break;
+    //case 32:
+    //  if (!playVO) {
+    //    playVO = true;
+    //  } else {
+    //    playVO=false;
+    //  }
+    //  break;
   }
 }
 
 void inputSignal( int globe ) {
   if  (globe == 1) {
-    //particles_remove.add( 1 );
+    particles_remove.add( 1 );
+    particles_add.add( 1 );
+    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
     }
   }
   if  (globe == 2) {
-    //particles_remove.add( 1 );
+    particles_add.add( 1 );
+    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
+    println( particles_add.size() );
     if (!playCreation2) {
       creation2.play();
       playCreation2 = true;
     }
   }
   if (globe == 3) {
-    //particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
-    //println( particles_add.size() );
+    println( particles_add.size() );
     if (!playDestruction1) {
       destruction1.play();
       playDestruction1 = true;
     }
   }
   if (globe == 4) {
-    //particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
-    //println( particles_add.size() );
+    particles_remove.add( 1 );
     if (!playDestruction2) {
       destruction2.play();
       playDestruction2 = true;
