@@ -155,18 +155,18 @@ void setup() {
   creation1 = new Movie(this, "creationwithsound_2.mp4 ");
   creation2 = new Movie(this, "creationwithaudio.mp4 ");
   creation1.loop();
-  creation1.jump(creation1.duration());
+  creation1.jump(creation1.duration()-0.1);
   creation1.pause();
   creation2.loop();
-  creation2.jump(creation2.duration());
+  creation2.jump(creation2.duration()-0.1);
   creation2.pause();
   destruction1 = new Movie(this, "destruction_2.mp4");
   destruction2 = new Movie(this, "destruction_3.mp4");
   destruction1.loop();
-  destruction1.jump(destruction1.duration());
+  destruction1.jump(destruction1.duration()-0.1);
   destruction1.pause();
   destruction2.loop();
-  destruction2.jump(destruction2.duration());
+  destruction2.jump(destruction2.duration()-0.1);
   destruction2.pause();
 
   startTime = millis();   //Get time in seconds
@@ -181,8 +181,8 @@ void setup() {
     particles.add(new Particle(new Vec2D(random(Rad*2), random(Rad*2))));
   }
 
-  initBirds(200);
-  initPreds(30);
+  initBirds(250);
+  initPreds(40);
   sphereMeshSetup();
   createMesh4Elements();
   plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();
@@ -360,7 +360,7 @@ void draw() {
   pushMatrix();
   //draws the jupiter model
   rotate(radians(26.73));
-  translate(Rad+buffer/2, -(Rad*0.5), -buffer*2);
+  translate(Rad+buffer/2, -(Rad*0.4), -buffer*2);
   customRotate(1, 0, 1, 0);
   scale(0.4, 0.5, 0.4);
   shape(jupiter, 0, 0);
