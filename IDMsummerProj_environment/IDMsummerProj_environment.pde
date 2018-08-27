@@ -61,8 +61,6 @@ PShape rock5;
 PShape earth;
 PShape jupiter;
 
-//PShader neon;
-
 PVector[] vertices;
 PVector[] vRef;
 PVector[] elementPos;
@@ -83,10 +81,12 @@ float meshBeatRate = 4300;
 
 boolean playCreation1 = false;
 boolean playCreation2 = false;
+boolean playDestruction1 = false;
+boolean playDestruction2 = false;
 
 void setup() {
-  //fullScreen(P3D, SPAN);
-  size(1024, 560, P3D);
+  fullScreen(P3D, SPAN);
+  //size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -111,9 +111,11 @@ void setup() {
   galaxy = new Movie(this, "galaxy3.mp4 ");
   galaxy.loop();
   creation1 = new Movie(this, "creationwithsound_2.mp4 ");
-  //creation2 = new Movie(this, "creationwithaudio.mp4 ");
+  creation2 = new Movie(this, "creationwithaudio.mp4 ");
   creation1.loop();
   creation1.pause();
+  creation2.loop();
+  creation2.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -142,9 +144,9 @@ void setup() {
   kinect.init();
 
   //serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -199,7 +201,7 @@ void pre() {
 }
 
 void draw() {
-  background(0);
+  background(200);
 
   //reset coordinates
   camera();
@@ -220,22 +222,39 @@ void draw() {
   pushMatrix();
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
-  translate(-(Rad*2+buffer), -Rad*0.4, Rad);
-  rotateY(radians(90));
+  //scale(0.3, 0.3);
+  translate(-(Rad*1.5), -(Rad*0.8), Rad*0.6);
+  rotateY(radians(100));
+  rotateX(-radians(30));
   image(galaxy, 0, 0);
   popMatrix();
 
   pushMatrix();
   //draws the creation1 animation (on the left)
+  //scale(0.5, 0.5);
   rotateY(radians(30));
-  translate(-Rad*2, -Rad*0.2, -Rad*1.5);
-  //scale(1.3, 1.3);
+  translate(-Rad*2, -(Rad*0.18), -Rad*1.5);
+  rotateY(radians(40));
   image(creation1, 0, 0);
   if (creation1.time() >= creation1.duration()-0.2) {
     //stops the video when a play is complete
     creation1.pause();
     creation1.jump(0); //rewind the video for the next play event
     playCreation1 = false;
+  }
+  popMatrix();
+
+  pushMatrix();
+  //draws the creation2 animation (on the right)
+  rotateY(-radians(30));
+  translate(-(Rad*1.5), -(Rad*0.7), -(Rad*2));
+  scale(1.5, 1.5);
+  image(creation2, 0, 0);
+  if (creation2.time() >= creation2.duration()-0.2) {
+    //stops the video when a play is complete
+    creation2.pause();
+    creation2.jump(0); //rewind the video for the next play event
+    playCreation2 = false;
   }
   popMatrix();
 
@@ -254,7 +273,7 @@ void draw() {
   pushMatrix();
   //draws the earth model
   rotate(radians(23.44));
-  translate(200, -(Rad*0.3), -(Rad+buffer));
+  translate((Rad*0.8), -(Rad*0.5), -(Rad+buffer));
   customRotate(0.8, 0, 1, 0);
   shape(earth, 0, 0);
   popMatrix();
@@ -262,9 +281,9 @@ void draw() {
   pushMatrix();
   //draws the saturn model
   rotate(radians(26.73));
-  translate((Rad+buffer*2), -200, 100);
+  translate((Rad+buffer*2), -(Rad*0.5), -Rad*0.75);
   customRotate(1, 0, 1, 0);
-  scale(2.5, 2.5, 2.5);
+  scale(1.5, 1.5, 1.5);
   shape(jupiter, 0, 0);
   popMatrix();
 
@@ -356,7 +375,6 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
-    inputSignal( 1 );
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
@@ -365,6 +383,10 @@ void keyPressed() {
 
   case 50:
     inputSignal( 2 );
+    if (!playCreation2) {
+      creation2.play();
+      playCreation2 = true;
+    }
     break;
 
   case 51:
@@ -378,12 +400,21 @@ void keyPressed() {
 }
 
 void inputSignal( int globe ) {
-  //if 1 or 2
-  if  (globe == 1 || globe == 2 ) {
-    particles_remove.add( 1 );
+  if  (globe == 1) {
+    //particles_remove.add( 1 );
+    if (!playCreation1) {
+      creation1.play();
+      playCreation1 = true;
+    }
   }
-  //if 3 or 4
-  else if ( globe == 3 || globe == 4 ) {
+  if  (globe == 2) {
+    //particles_remove.add( 1 );
+    if (!playCreation2) {
+      creation2.play();
+      playCreation2 = true;
+    }
+  }
+  if ( globe == 3 || globe == 4 ) {
     particles_add.add( 1 );
     //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
     println( particles_add.size() );
