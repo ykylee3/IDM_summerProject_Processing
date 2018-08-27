@@ -117,19 +117,19 @@ void setup() {
   creation1 = new Movie(this, "creationwithsound_2.mp4 ");
   creation2 = new Movie(this, "creationwithaudio.mp4 ");
   creation1.loop();
-  creation1.jump(0);
+  creation1.jump(creation1.duration());
   creation1.pause();
   creation2.loop();
+  creation2.jump(creation2.duration());
   creation2.pause();
-  creation2.jump(0);
   destruction1 = new Movie(this, "destruction_2.mp4");
   destruction2 = new Movie(this, "destruction_3.mp4");
   destruction1.loop();
+  destruction1.jump(destruction1.duration());
   destruction1.pause();
-  destruction1.jump(0);
   destruction2.loop();
+  destruction2.jump(destruction2.duration());
   destruction2.pause();
-  destruction2.jump(0);
 
   startTime = millis();   //Get time in seconds
 
@@ -273,7 +273,7 @@ void draw() {
 
   pushMatrix();
   //draws the destruction1 animation (on the right)
-  translate(((Rad+buffer)), -(Rad), -Rad*2);
+  translate((Rad+buffer), -(Rad), -Rad*1.7);
   rotateY(-radians(60));
   rotateX(-radians(20));
   rotate(radians(20));
@@ -288,8 +288,13 @@ void draw() {
 
   pushMatrix();
   //draws the destruction2 animation (on the middle-left)
-  translate(-(Rad*2), -(Rad*0.5), -(Rad+buffer)*1.5);
-  rotateY(radians(30));
+  //translate(-(Rad*0.4), -(Rad*1.5), -(Rad+buffer)*2);
+  //rotateY(radians(50));
+  //scale(1.5, 1.5);
+  //rotate(radians(90));
+  //rotateX(-radians(35));
+  translate(-(Rad*1.5), -(Rad*0.5), -(Rad+buffer)*1.5);
+  rotateY(radians(20));
   image(destruction2, 0, 0);
   if (destruction2.time() >= destruction2.duration()-0.2) {
     //stops the video when a play is complete
