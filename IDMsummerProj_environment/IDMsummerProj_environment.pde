@@ -1,4 +1,6 @@
-import ddf.minim.*; //<>//
+import java.util.Random; //<>//
+
+import ddf.minim.*;
 import peasy.PeasyCam;
 
 //Toxiclibs and Kinect libs
@@ -13,6 +15,7 @@ import KinectPV2.*;
 import processing.serial.*;
 import processing.video.*;
 
+Random r = new Random();
 
 PeasyCam cam;
 Minim minim;
@@ -86,12 +89,47 @@ boolean playCreation2 = false;
 boolean playDestruction1 = false;
 boolean playDestruction2 = false;
 
+////initializing variables for random voice overs
+//float VOnow;
+//float time;
+//int[] number = new int[13];
+//int count=0;
+//int num;
+//int pause = 8000;
+//int tracksPlayed;
+//int finalTrack = -1;
+//boolean result = false;
+//boolean repeat = false;
+//boolean playVO = false;
+//AudioPlayer sequence0, sequence1, sequence2, sequence3, sequence4, sequence5, sequence6, 
+//  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
+
 void setup() {
-  fullScreen(P3D, SPAN);
-  //size(1280, 720, P3D);
+  //fullScreen(P3D, SPAN);
+  size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
+
+  minim = new Minim(this);
+  
+  ////loads voice over files
+  //sequence0 = minim.loadFile("1_3.mp3");
+  //sequence1 = minim.loadFile("2_3.mp3");
+  //sequence2 = minim.loadFile("3_3.mp3");
+  //sequence3 = minim.loadFile("4_3.mp3");
+  //sequence4 = minim.loadFile("5_3.mp3");
+  //sequence5 = minim.loadFile("6_3.mp3");
+  //sequence6 = minim.loadFile("7_3.mp3");
+  //sequence7 = minim.loadFile("8_3.mp3");
+  //sequence8 = minim.loadFile("9_3.mp3");
+  //sequence9 = minim.loadFile("10_3.mp3");
+  //sequence10 = minim.loadFile("11_3.mp3");
+  //sequence11 = minim.loadFile("12_3.mp3");
+  //sequence12 = minim.loadFile("13_3.mp3");
+  
+  ////Creates a playlist of voice overs
+  //setOrder();
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
 
@@ -215,7 +253,7 @@ void pre() {
 }
 
 void draw() {
-  background(200);
+  background(0);
 
   //reset coordinates
   camera();
@@ -288,11 +326,6 @@ void draw() {
 
   pushMatrix();
   //draws the destruction2 animation (on the middle-left)
-  //translate(-(Rad*0.4), -(Rad*1.5), -(Rad+buffer)*2);
-  //rotateY(radians(50));
-  //scale(1.5, 1.5);
-  //rotate(radians(90));
-  //rotateX(-radians(35));
   translate(-(Rad*1.5), -(Rad*0.5), -(Rad+buffer)*1.5);
   rotateY(radians(20));
   image(destruction2, 0, 0);
@@ -398,6 +431,12 @@ void draw() {
   translate(-width/2, -height/2, -Rad);
   drawBirds();
   drawPreds();
+
+  //if (playVO) {
+  //  //random voice overs
+  //  playTrack();
+  //  result = listComplete(tracksPlayed);
+  //}
 }
 
 //reads new frame of the movie 
@@ -448,6 +487,15 @@ void keyPressed() {
       destruction2.play();
       playDestruction2 = true;
     }
+    break;
+
+  case 32:
+    if (!playVO) {
+      playVO = true;
+    } else {
+      playVO=false;
+    }
+    break;
   }
 }
 

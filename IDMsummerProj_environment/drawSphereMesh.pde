@@ -66,7 +66,7 @@ void drawSphereMesh() {
       if (distance  < connectionDistance) {
         //nlines+=1;
         stroke(255);
-        fill(255, 255, 255);
+        fill(255);
         beginShape();
         vertex(verta.x, verta.y, verta.z);
         vertex(verta.x+1, verta.y+1, verta.z+1);
