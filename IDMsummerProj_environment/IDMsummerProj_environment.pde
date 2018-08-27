@@ -117,15 +117,19 @@ void setup() {
   creation1 = new Movie(this, "creationwithsound_2.mp4 ");
   creation2 = new Movie(this, "creationwithaudio.mp4 ");
   creation1.loop();
+  creation1.jump(0);
   creation1.pause();
   creation2.loop();
   creation2.pause();
+  creation2.jump(0);
   destruction1 = new Movie(this, "destruction_2.mp4");
   destruction2 = new Movie(this, "destruction_3.mp4");
   destruction1.loop();
   destruction1.pause();
+  destruction1.jump(0);
   destruction2.loop();
   destruction2.pause();
+  destruction2.jump(0);
 
   startTime = millis();   //Get time in seconds
 
@@ -268,9 +272,7 @@ void draw() {
   popMatrix();
 
   pushMatrix();
-  //draws the destruction1 animation (on the middle-left)
-  //scale(0.5, 0.5);
-  
+  //draws the destruction1 animation (on the right)
   translate(((Rad+buffer)), -(Rad), -Rad*2);
   rotateY(-radians(60));
   rotateX(-radians(20));
@@ -281,6 +283,19 @@ void draw() {
     destruction1.pause();
     destruction1.jump(0); //rewind the video for the next play event
     playDestruction1 = false;
+  }
+  popMatrix();
+
+  pushMatrix();
+  //draws the destruction2 animation (on the middle-left)
+  translate(-(Rad*2), -(Rad*0.5), -(Rad+buffer)*1.5);
+  rotateY(radians(30));
+  image(destruction2, 0, 0);
+  if (destruction2.time() >= destruction2.duration()-0.2) {
+    //stops the video when a play is complete
+    destruction2.pause();
+    destruction2.jump(0); //rewind the video for the next play event
+    playDestruction2 = false;
   }
   popMatrix();
 
