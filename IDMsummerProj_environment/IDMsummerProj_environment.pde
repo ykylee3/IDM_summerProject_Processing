@@ -1,4 +1,4 @@
-import java.util.Random; //<>//
+//import java.util.Random; //<>//
 
 import ddf.minim.*;
 import peasy.PeasyCam;
@@ -15,7 +15,7 @@ import KinectPV2.*;
 import processing.serial.*;
 import processing.video.*;
 
-Random r = new Random();
+//Random r = new Random();
 
 PeasyCam cam;
 Minim minim;
@@ -489,13 +489,13 @@ void keyPressed() {
     }
     break;
 
-  case 32:
-    if (!playVO) {
-      playVO = true;
-    } else {
-      playVO=false;
-    }
-    break;
+  //case 32:
+  //  if (!playVO) {
+  //    playVO = true;
+  //  } else {
+  //    playVO=false;
+  //  }
+  //  break;
   }
 }
 
