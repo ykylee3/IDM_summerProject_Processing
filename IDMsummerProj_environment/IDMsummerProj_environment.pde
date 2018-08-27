@@ -23,6 +23,8 @@ AudioPlayer kinectEffect;
 Movie galaxy;
 Movie creation1;
 Movie creation2;
+Movie destruction1;
+Movie destruction2;
 
 //arduino communication
 Serial myPort;  // Create object from Serial class
@@ -92,10 +94,12 @@ void setup() {
   sphereDetail(8);
 
   cam = new PeasyCam(this, -Rad); // init camera distance at the center of the sphere
+
   minim = new Minim(this);
   ambient = minim.loadFile("ambience_combine.mp3");
   globeEffect = minim.loadFile("globe_2_new.mp3");
   kinectEffect = minim.loadFile("kinect_2_new.mp3");
+
   alien = loadShape("alien.obj");
   helix = loadShape("helix.obj");
   virus = loadShape("virus.obj");
@@ -116,6 +120,12 @@ void setup() {
   creation1.pause();
   creation2.loop();
   creation2.pause();
+  destruction1 = new Movie(this, "destruction_2.mp4");
+  destruction2 = new Movie(this, "destruction_3.mp4");
+  destruction1.loop();
+  destruction1.pause();
+  destruction2.loop();
+  destruction2.pause();
 
   startTime = millis();   //Get time in seconds
 
@@ -231,7 +241,6 @@ void draw() {
 
   pushMatrix();
   //draws the creation1 animation (on the left)
-  //scale(0.5, 0.5);
   rotateY(radians(30));
   translate(-Rad*2, -(Rad*0.18), -Rad*1.5);
   rotateY(radians(40));
@@ -245,16 +254,33 @@ void draw() {
   popMatrix();
 
   pushMatrix();
-  //draws the creation2 animation (on the right)
+  //draws the creation2 animation (on the middle-right)
   rotateY(-radians(30));
   translate(-(Rad*1.5), -(Rad*0.7), -(Rad*2));
-  scale(1.5, 1.5);
+  scale(0.8, 0.8);
   image(creation2, 0, 0);
   if (creation2.time() >= creation2.duration()-0.2) {
     //stops the video when a play is complete
     creation2.pause();
     creation2.jump(0); //rewind the video for the next play event
     playCreation2 = false;
+  }
+  popMatrix();
+
+  pushMatrix();
+  //draws the destruction1 animation (on the middle-left)
+  //scale(0.5, 0.5);
+  
+  translate(((Rad+buffer)), -(Rad), -Rad*2);
+  rotateY(-radians(60));
+  rotateX(-radians(20));
+  rotate(radians(20));
+  image(destruction1, 0, 0);
+  if (destruction1.time() >= destruction1.duration()-0.2) {
+    //stops the video when a play is complete
+    destruction1.pause();
+    destruction1.jump(0); //rewind the video for the next play event
+    playDestruction1 = false;
   }
   popMatrix();
 
@@ -391,12 +417,19 @@ void keyPressed() {
 
   case 51:
     inputSignal( 3 );
+    if (!playDestruction1) {
+      destruction1.play();
+      playDestruction1 = true;
+    }
     break;
 
   case 52:
     inputSignal( 4 );
+    if (!playDestruction2) {
+      destruction2.play();
+      playDestruction2 = true;
+    }
   }
-  //inputSignal( key );
 }
 
 void inputSignal( int globe ) {
@@ -414,9 +447,22 @@ void inputSignal( int globe ) {
       playCreation2 = true;
     }
   }
-  if ( globe == 3 || globe == 4 ) {
-    particles_add.add( 1 );
+  if (globe == 3) {
+    //particles_add.add( 1 );
     //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
-    println( particles_add.size() );
+    //println( particles_add.size() );
+    if (!playDestruction1) {
+      destruction1.play();
+      playDestruction1 = true;
+    }
+  }
+  if (globe == 4) {
+    //particles_add.add( 1 );
+    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
+    //println( particles_add.size() );
+    if (!playDestruction2) {
+      destruction2.play();
+      playDestruction2 = true;
+    }
   }
 }
