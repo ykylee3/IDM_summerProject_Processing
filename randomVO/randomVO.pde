@@ -8,8 +8,8 @@ float VOnow;
 float time;
 int[] number = new int[13];
 int count=0;
-int num;
-int pause = 0;
+int num; 
+int pause = 8500;
 int tracksPlayed;
 int finalTrack = -1;
 boolean result = false;
@@ -104,54 +104,67 @@ void playTrack() {
         if (number[x]==1) {
           sequence0.play();
           time=5000+pause;
+          delay(int(time));
         }
         if (number[x]==2) {
           sequence1.play();
           time=9000+pause;
+          delay(int(time));
         }
         if (number[x]==3) {
           sequence2.play();
           time=7000+pause;
+          delay(int(time));
         }
         if (number[x]==4) {
           sequence3.play();
           time=7000+pause;
+          delay(int(time));
         }
         if (number[x]==5) {
           sequence4.play();
           time=8000+pause;
+          delay(int(time));
         }
         if (number[x]==6) {
           sequence5.play();
           time=9000+pause;
+          delay(int(time));
         }
         if (number[x]==7) {
           sequence6.play();
           time=6000+pause;
+          delay(int(time));
         }
         if (number[x]==8) {
           sequence7.play();
           time=8000+pause;
+          delay(int(time));
         }
         if (number[x]==9) {
           sequence8.play();
           time=6000+pause;
+          delay(int(time));
         }
         if (number[x]==10) {
           sequence9.play();
           time=7000+pause;
+          delay(int(time));
         }
         if (number[x]==11) {
           sequence10.play();
           time=4000+pause;
+          delay(int(time));
         }
         if (number[x]==12) {
           sequence11.play();
           time=7000+pause;
+          delay(int(time));
         }
         if (number[x]==13) {
           sequence12.play();
           time=7000;
+          delay(int(time));
         }
         tracksPlayed+=1;
         if (tracksPlayed==number.length) {
