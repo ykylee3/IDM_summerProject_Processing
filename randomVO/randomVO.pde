@@ -1,18 +1,22 @@
 import ddf.minim.*;
+import java.util.Random;
 
 Minim minim;
+Random r = new Random();
 
-int total = 13;
 float VOnow;
 float time;
-int j;
+int[] number = new int[13];
+int count=0;
+int num;
+int pause = 0;
+int tracksPlayed;
+int finalTrack = -1;
+boolean result = false;
+boolean repeat = false;
 
 AudioPlayer sequence0, sequence1, sequence2, sequence3, sequence4, sequence5, sequence6, 
   sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
-
-int[] listen=new int[total];
-int[] check=new int[total];
-int[] timeCheck=new int[total];
 
 void setup() {
   size(10, 10);
@@ -32,183 +36,140 @@ void setup() {
   sequence11 = minim.loadFile("12_3.mp3");
   sequence12 = minim.loadFile("13_3.mp3");
 
-
-  for (int x=0; x<total; x++) {
-    check[x]=0;
-    listen[x]=-1;
-  }
-
-  for (int x=0; x<total; x++) {
-    int ran=(int)(Math.random()*total);
-    if (check[ran]==0) {
-      listen[x]=ran;
-      timeCheck[x]=ran;
-      check[ran]=1;
-    } else {
-      x=x-1;
-    }
-  }
+  setOrder();
 }
-
 
 void draw() {
   playTrack();
-  
-  if (millis()-VOnow > time) { 
-    VOnow = millis();
-    j+=1;
-    if (j==total) {
-      j=0;
-    }
-  }
+  result = listComplete(tracksPlayed);
 }
 
-void trackLength() {
-  if (timeCheck[j]==0) {
-    time=8000;
-    println("0");
-    delay(int(time));
-    sequence0.rewind();
+void setOrder() {
+  sequence0.rewind();
+  sequence1.rewind();
+  sequence2.rewind();
+  sequence3.rewind();
+  sequence4.rewind();
+  sequence5.rewind();  
+  sequence6.rewind();
+  sequence7.rewind();
+  sequence8.rewind();
+  sequence9.rewind();
+  sequence10.rewind();
+  sequence11.rewind();
+  sequence12.rewind();
+  println("setOrder");
+  while (count<number.length) {
+    //generates a random number between the range of 1 to 13. (both range values are inclusive)
+    num = r.nextInt(14-1)+1;
+    do {
+      for (int i=0; i<number.length; i++) {
+        if (num == number[i]) {
+          repeat = true;
+          break;
+        } else if (i == count) { 
+          number[count] = num;
+          count++;
+          repeat = true;
+          break;
+        }
+        finalTrack = number[number.length-1];
+        if (number[0]==finalTrack) {
+          repeat = true;
+          break;
+        }
+      }
+    } while (!repeat);
   }
-  if (timeCheck[j]==1) {
-    time=12000;
-    println("1");
-    delay(int(time));
-    sequence1.rewind();
-  }
-  if (timeCheck[j]==2) {
-    time=10000;
-    println("2");
-    delay(int(time));
-    sequence2.rewind();
-  }
-  if (timeCheck[j]==3) {
-    time=10000;
-    println("3");
-    delay(int(time));
-    sequence3.rewind();
-  }
-  if (timeCheck[j]==4) {
-    time=11000;
-    println("4");
-    delay(int(time));
-    sequence4.rewind();
-  }
-  if (timeCheck[j]==5) {
-    time=12000;
-    println("5");
-    delay(int(time));
-    sequence5.rewind();
-  }
-  if (timeCheck[j]==6) {
-    time=9000;
-    println("6");
-    delay(int(time));
-    sequence6.rewind();
-  }
-  if (timeCheck[j]==7) {
-    time=11000;
-    println("7");
-    delay(int(time));
-    sequence7.rewind();
-  }
-  if (timeCheck[j]==8) {
-    time=9000;
-    println("8");
-    delay(int(time));
-    sequence8.rewind();
-  }
-  if (timeCheck[j]==9) {
-    time=10000;
-    println("9");
-    delay(int(time));
-    sequence9.rewind();
-  }
-  if (timeCheck[j]==10) {
-    time=7000;
-    println("10");
-    delay(int(time));
-    sequence10.rewind();
-  }
-  if (timeCheck[j]==11) {
-    time=10000;
-    println("11");
-    delay(int(time));
-    sequence11.rewind();
-  }
-  if (timeCheck[j]==12) {
-    time=7000;
-    println("12");
-    delay(int(time));
-    sequence12.rewind();
-  }
+  result = false;
+  delay(int(time));
 }
 
 void playTrack() {
-  for (int x=0; x<total; x++) {
-    if (listen[x]==0) {
-      sequence0.play();
-      trackLength();
-    }
-    if (listen[x]==1) {
-      sequence1.play();
-        trackLength();
+  println("playTrack");
+  for (int x=0; x<number.length; x++) {
+    println(tracksPlayed + ": " + number[x]);
+    println(result);
 
-    }
-    if (listen[x]==2) {
-      sequence2.play();
-        trackLength();
-
-    }
-    if (listen[x]==3) {
-      sequence3.play();
-        trackLength();
-
-    }
-    if (listen[x]==4) {
-      sequence4.play();
-        trackLength();
-
-    }
-    if (listen[x]==5) {
-      sequence5.play();
-        trackLength();
-
-    }
-    if (listen[x]==6) {
-      sequence6.play();
-        trackLength();
-
-    }
-    if (listen[x]==7) {
-      sequence7.play();
-        trackLength();
-
-    }
-    if (listen[x]==8) {
-      sequence8.play();
-        trackLength();
-
-    }
-    if (listen[x]==9) {
-      sequence9.play();
-        trackLength();
-
-    }
-    if (listen[x]==10) {
-      sequence10.play();
-        trackLength();
-
-    }
-    if (listen[x]==11) {
-      sequence11.play();
-        trackLength();
-
-    }
-    if (listen[x]==12) {
-      sequence12.play();
-        trackLength();
-
+    if (result == true) {
+      println("in the loop: " + result);
+      count = 0;
+      finalTrack = -1;
+      //tracksPlayed = 0;
+      repeat = false;
+      setOrder();
+    } else {
+      if (tracksPlayed<number.length) {
+        println("in the loop: " + result);
+        if (number[x]==1) {
+          sequence0.play();
+          time=5000+pause;
+        }
+        if (number[x]==2) {
+          sequence1.play();
+          time=9000+pause;
+        }
+        if (number[x]==3) {
+          sequence2.play();
+          time=7000+pause;
+        }
+        if (number[x]==4) {
+          sequence3.play();
+          time=7000+pause;
+        }
+        if (number[x]==5) {
+          sequence4.play();
+          time=8000+pause;
+        }
+        if (number[x]==6) {
+          sequence5.play();
+          time=9000+pause;
+        }
+        if (number[x]==7) {
+          sequence6.play();
+          time=6000+pause;
+        }
+        if (number[x]==8) {
+          sequence7.play();
+          time=8000+pause;
+        }
+        if (number[x]==9) {
+          sequence8.play();
+          time=6000+pause;
+        }
+        if (number[x]==10) {
+          sequence9.play();
+          time=7000+pause;
+        }
+        if (number[x]==11) {
+          sequence10.play();
+          time=4000+pause;
+        }
+        if (number[x]==12) {
+          sequence11.play();
+          time=7000+pause;
+        }
+        if (number[x]==13) {
+          sequence12.play();
+          time=7000;
+        }
+        tracksPlayed+=1;
+        if (tracksPlayed==number.length) {
+          result = listComplete(tracksPlayed);
+          tracksPlayed=0;
+        }
+        delay(int(time));
+      }
     }
   }
+}
+
+boolean listComplete(int n) {
+  if (n<number.length-1 && n>0) {
+    result = false;
+  } 
+  if (n==number.length) {
+    result = true;
+  }
+  return result;
 }
