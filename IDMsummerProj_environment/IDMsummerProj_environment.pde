@@ -105,8 +105,8 @@ boolean playDestruction2 = false;
 //  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
 
 void setup() {
-  //fullScreen(P3D, SPAN);
-  size(1280, 720, P3D);
+  fullScreen(P3D, SPAN);
+  //size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -360,7 +360,7 @@ void draw() {
   pushMatrix();
   //draws the jupiter model
   rotate(radians(26.73));
-  translate(Rad+buffer/2, -(Rad*0.5), -buffer*2);
+  translate(Rad+buffer/2, -(Rad*0.5), -buffer*3);
   customRotate(1, 0, 1, 0);
   shape(jupiter, 0, 0);
   popMatrix();
