@@ -215,7 +215,7 @@ void pre() {
 }
 
 void draw() {
-  background(0);
+  background(200);
 
   //reset coordinates
   camera();
@@ -237,9 +237,9 @@ void draw() {
   //draws the galaxy animation on the left screen
   customRotate(0, 0, 0, 0);
   scale(0.3, 0.3, 0.3);
-  translate(-(Rad*3), -(Rad*1.2), -Rad*0.8);
-  rotateY(radians(100));
-  rotateX(-radians(30));
+  translate(-(Rad*3.5), -(Rad*1.2), -Rad*0.8);
+  rotateY(radians(60));
+  rotateX(-radians(20));
   image(galaxy, 0, 0);
   popMatrix();
 
@@ -259,8 +259,9 @@ void draw() {
 
   pushMatrix();
   //draws the creation2 animation (on the middle-right)
-  rotateY(-radians(30));
-  translate((-Rad*1.4), -(Rad), -(Rad*2));
+  scale(1.3, 1.3, 1.3);
+  rotateY(-radians(20));
+  translate((-Rad), -(Rad), -(Rad*2));
   rotateX(-radians(20));
   image(creation2, 0, 0);
   if (creation2.time() >= creation2.duration()-0.2) {
@@ -326,7 +327,7 @@ void draw() {
   pushMatrix();
   //draws the jupiter model
   rotate(radians(26.73));
-  translate(Rad+buffer*2, -(Rad*0.5), -Rad*0.75);
+  translate(Rad+buffer/2, -(Rad*0.5), -buffer*2);
   customRotate(1, 0, 1, 0);
   shape(jupiter, 0, 0);
   popMatrix();
