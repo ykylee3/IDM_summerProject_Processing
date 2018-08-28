@@ -203,9 +203,9 @@ void setup() {
   kinect.init();
 
   //serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
