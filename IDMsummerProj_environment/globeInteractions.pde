@@ -1,7 +1,4 @@
 ArrayList<CD> cd = new ArrayList<CD>(); 
-float bound = 10;
-PVector min = new PVector(-(Rad+bound), -(Rad+bound), -(Rad+bound));
-PVector max = new PVector((Rad+bound), (Rad+bound), 0);
 
 void drawCD() {
   for (CD p : cd) {
@@ -15,6 +12,8 @@ class CD {
   PVector pos;
   PVector vel;
   PVector acc;
+  PVector min = new PVector(-(Rad), -(Rad*0.3), -(Rad));
+  PVector max = new PVector((Rad), Rad*0.3, 0);
 
 
   CD(PVector p) {
@@ -37,6 +36,7 @@ class CD {
     //scale(10, 10, 10);
     translate(pos.x, pos.y, pos.z);
     customRotate(2, 0.7, 0.4, 0.5);
+    scale(5, 5, 5);
     shape(sharpsphere, 0, 0);
     popMatrix();
   }

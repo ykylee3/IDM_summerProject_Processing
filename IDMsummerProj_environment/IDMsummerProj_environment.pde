@@ -297,12 +297,10 @@ void draw() {
     creation1.pause();
     creation1.jump(0); //rewind the video for the next play event
     playCreation1 = false;
-    //set coordinates and calls the function: create particles
-    cdX = 0;
-    cdY = 0;
-    cdZ = 0;
-    //particles_add.add( 1 );
-    //println(particles_add.size() );
+    //set coordinates and calls the function to create particles
+    cdX = -Rad;
+    cdY = -(Rad*0.1);
+    cdZ = -(Rad*1.6);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();
@@ -319,6 +317,11 @@ void draw() {
     creation2.pause();
     creation2.jump(0); //rewind the video for the next play event
     playCreation2 = false;
+    //set coordinates and calls the function to create particles
+    cdX = Rad*0.3;
+    cdY = -(Rad*0.8);
+    cdZ = -(Rad*1.5);
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();
 
@@ -425,8 +428,8 @@ void draw() {
   drawKinect();
   popMatrix();
 
-  
-  
+
+
   pushMatrix();
   //calling explosion
   //for ( float coordArray[] : particles_explosion ) {    
@@ -442,7 +445,7 @@ void draw() {
   //cleaning array
   particles_creation.clear();
   popMatrix();
-  
+
   pushMatrix();
   drawCD();
   popMatrix();
@@ -450,7 +453,7 @@ void draw() {
   translate(-width/2, -height/2, -Rad);
   drawBirds();
   drawPreds();
-  
+
 
 
   //if (playVO) {
