@@ -6,6 +6,23 @@ void drawCD() {
     p.display();
     p.bounce();
   }
+  println("destroy particles array: " + cd.size());
+}
+
+void destroy() {
+for ( Integer num : particles_remove ) {
+    int randParticleN = int( random( cd.size() ) );
+    CD randParticle = cd.get( randParticleN );
+    println( randParticle.pos.x, randParticle.pos.y );
+    float coordArray[] = new float [] { randParticle.pos.x, randParticle.pos.y };
+    //calling explosion event
+    //particles_explosion.add( coordArray );
+    //removes from particles
+    cd.remove( randParticleN );
+  }
+  //clean array particles_remove
+  particles_remove.clear();
+  println("after destroy particles array: " + cd.size());
 }
 
 class CD {
@@ -20,13 +37,11 @@ class CD {
     pos = p;
     vel = new PVector(random(-1, 1), random(1, 1), random(-1, 1));
     acc = new PVector(random(-1, 1), random(-1, 1), random(-1, 1)); //speed
-    //acc = new PVector(random(-1, 1), random(1, 1), random(-1, 1));
   }
 
   void update() {
     vel.add(acc);
     pos.add(vel);
-    //pos.add(acc);
     acc.mult(0); //Reset acc every time update() is called.
     vel.limit(4);
   }

@@ -211,21 +211,6 @@ void setup() {
   registerMethod("pre", this);
 }
 
-// It will run this inside draw() every time a particle is removed
-// Add here whatever you want to appear in the dead particle coordinates
-//void explodeParticle( float x, float y ) {
-//  fill(0, 255, 255);
-//  translate(x, y);
-//  sphere(100);
-//}
-
-// It will run this inside draw() every time a particle is created
-// Add here whatever you want to appear in the new particle coordinates
-//void createParticle( float x, float y ) {
-//  fill(0, 255, 0);
-//  translate(x, y);
-//  sphere(100);
-//}
 
 //method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
 void pre() {
@@ -243,18 +228,6 @@ void pre() {
   }
   //clean array particles_remove
   particles_remove.clear();
-
-  //adds particles to the array particles_add and from the particles added to 
-  //that array, adds particles in the array particles
-  for ( Integer num : particles_add ) {
-    float coordArray[] = new float [] { cdX, cdY };
-    //calling creation event
-    particles_creation.add( coordArray );
-    //adds to particles
-    particles.add( new Particle( new Vec2D( cdX, cdY ) ) );
-  }
-  //clean array particles_add
-  particles_add.clear();
 }
 
 void draw() {
@@ -302,6 +275,7 @@ void draw() {
     cdY = -(Rad*0.1);
     cdZ = -(Rad*1.6);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+    particles_remove.add( 1 );
   }
   popMatrix();
 
@@ -319,9 +293,10 @@ void draw() {
     playCreation2 = false;
     //set coordinates and calls the function to create particles
     cdX = Rad*0.3;
-    cdY = -(Rad*0.8);
+    cdY = -(Rad*0.6);
     cdZ = -(Rad*1.5);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+    particles_remove.add( 1 );
   }
   popMatrix();
 
@@ -336,6 +311,7 @@ void draw() {
     destruction1.pause();
     destruction1.jump(0); //rewind the video for the next play event
     playDestruction1 = false;
+    destroy();
   }
   popMatrix();
 
@@ -349,6 +325,7 @@ void draw() {
     destruction2.pause();
     destruction2.jump(0); //rewind the video for the next play event
     playDestruction2 = false;
+    destroy();
   }
   popMatrix();
 
@@ -392,13 +369,6 @@ void draw() {
   placeElements();
   popMatrix();
 
-  //pushMatrix();
-  ////camera position - mock up
-  //fill(255, 255, 255);
-  //noStroke();
-  //customRotate(0, 0, 0, 0);
-  //sphere(20);
-  //popMatrix();
 
   //to get the number of users and for each new user play the sound effect
   int getUsers = int(kinect.getNumOfUsers());
@@ -454,8 +424,6 @@ void draw() {
   drawBirds();
   drawPreds();
 
-
-
   //if (playVO) {
   //  //random voice overs
   //  playTrack();
@@ -495,7 +463,6 @@ void keyPressed() {
       creation2.play();
       playCreation2 = true;
     }
-    particles_add.add( 1 );
     break;
 
   case 51:
@@ -504,7 +471,7 @@ void keyPressed() {
       destruction1.play();
       playDestruction1 = true;
     }
-    particles_remove.add( 1 );
+    destroy();
     break;
 
   case 52:
@@ -513,7 +480,7 @@ void keyPressed() {
       destruction2.play();
       playDestruction2 = true;
     }
-    particles_remove.add( 1 );
+    destroy();
     break;
 
     //case 32:
@@ -528,33 +495,24 @@ void keyPressed() {
 
 void inputSignal( int globe ) {
   if  (globe == 1) {
-    //particles_remove.add( 1 );
-    //particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
     }
   }
   if  (globe == 2) {
-    particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
-    //println( particles_add.size() );
     if (!playCreation2) {
       creation2.play();
       playCreation2 = true;
     }
   }
   if (globe == 3) {
-    particles_remove.add( 1 );
-    //println( particles_add.size() );
     if (!playDestruction1) {
       destruction1.play();
       playDestruction1 = true;
     }
   }
   if (globe == 4) {
-    particles_remove.add( 1 );
     if (!playDestruction2) {
       destruction2.play();
       playDestruction2 = true;
