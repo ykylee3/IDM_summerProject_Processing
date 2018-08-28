@@ -65,6 +65,7 @@ PShape bowl;
 PShape rock5;
 PShape earth;
 PShape jupiter;
+PShape sharpsphere;
 
 PVector[] vertices;
 PVector[] vRef;
@@ -83,6 +84,16 @@ float connectionDistance = 140; //Threshold parameter of distance to connect
 float startTime;
 float now = millis();
 float meshBeatRate = 4300;
+
+//kinect threshold in meters
+int maxD = 2;
+int minD = 1;
+
+
+//coordinates for the particles to be created (through plasma globe interactions)
+float cdX;
+float cdY;
+float cdZ;
 
 boolean playCreation1 = false;
 boolean playCreation2 = false;
@@ -105,8 +116,8 @@ boolean playDestruction2 = false;
 //  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
 
 void setup() {
-  fullScreen(P3D, SPAN);
-  //size(1280, 720, P3D);
+  //fullScreen(P3D, SPAN);
+  size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -148,6 +159,7 @@ void setup() {
   rock5 = loadShape("rock5.obj");
   earth = loadShape("earth2.obj");
   jupiter = loadShape("jupiter.obj");
+  sharpsphere = loadShape("sharpsphere.obj");
 
   //galaxy = new Movie(this, "g2.mp4 ");
   galaxy = new Movie(this, "galaxy3.mp4 ");
@@ -193,32 +205,20 @@ void setup() {
   //Kinect Setup
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
+  kinect.enableDepthImg(true);
   kinect.init();
+  kinect.setLowThresholdPC(minD);
+  kinect.setHighThresholdPC(maxD);
 
   //serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
 }
 
-// It will run this inside draw() every time a particle is removed
-// Add here whatever you want to appear in the dead particle coordinates
-void explodeParticle( float x, float y ) {
-  fill(0, 255, 255);
-  translate(x, y);
-  sphere(100);
-}
-
-// It will run this inside draw() every time a particle is created
-// Add here whatever you want to appear in the new particle coordinates
-void createParticle( float x, float y ) {
-  fill(100, 255, 100);
-  translate(x, y);
-  sphere(100);
-}
 
 //method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
 void pre() {
@@ -236,24 +236,10 @@ void pre() {
   }
   //clean array particles_remove
   particles_remove.clear();
-
-  //adds particles to the array particles_add and from the particles added to 
-  //that array, adds particles in the array particles
-  for ( Integer num : particles_add ) {
-    float rndW = random( width );
-    float rndH = random( height );
-    float coordArray[] = new float [] { rndW, rndH };
-    //calling creation event
-    particles_creation.add( coordArray );
-    //adds to particles
-    particles.add( new Particle( new Vec2D( rndW, rndH ) ) );
-  }
-  //clean array particles_add
-  particles_add.clear();
 }
 
 void draw() {
-  background(0);
+  background(200);
 
   //reset coordinates
   camera();
@@ -292,6 +278,12 @@ void draw() {
     creation1.pause();
     creation1.jump(0); //rewind the video for the next play event
     playCreation1 = false;
+    //set coordinates and calls the function to create particles
+    cdX = -Rad;
+    cdY = -(Rad*0.1);
+    cdZ = -(Rad*1.6);
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+    particles_remove.add( 1 );
   }
   popMatrix();
 
@@ -307,6 +299,12 @@ void draw() {
     creation2.pause();
     creation2.jump(0); //rewind the video for the next play event
     playCreation2 = false;
+    //set coordinates and calls the function to create particles
+    cdX = Rad*0.3;
+    cdY = -(Rad*0.6);
+    cdZ = -(Rad*1.5);
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+    particles_remove.add( 1 );
   }
   popMatrix();
 
@@ -321,6 +319,7 @@ void draw() {
     destruction1.pause();
     destruction1.jump(0); //rewind the video for the next play event
     playDestruction1 = false;
+    destroy();
   }
   popMatrix();
 
@@ -334,6 +333,7 @@ void draw() {
     destruction2.pause();
     destruction2.jump(0); //rewind the video for the next play event
     playDestruction2 = false;
+    destroy();
   }
   popMatrix();
 
@@ -377,14 +377,6 @@ void draw() {
   placeElements();
   popMatrix();
 
-  pushMatrix();
-  //camera
-  fill(255, 255, 255);
-  noStroke();
-  customRotate(0, 0, 0, 0);
-  sphere(20);
-  popMatrix();
-
   //to get the number of users and for each new user play the sound effect
   int getUsers = int(kinect.getNumOfUsers());
   if (getUsers > numUsers) {
@@ -415,18 +407,22 @@ void draw() {
 
   pushMatrix();
   //calling explosion
-  for ( float coordArray[] : particles_explosion ) {    
-    explodeParticle( coordArray[0], coordArray[1] );
-  }
+  //for ( float coordArray[] : particles_explosion ) {    
+  //  explodeParticle( coordArray[0], coordArray[1] );
+  //}
   //cleaning array
   particles_explosion.clear();
 
   //calling creation
-  for ( float coordArray[] : particles_creation ) {    
-    createParticle( coordArray[0], coordArray[1] );
-  }
+  //for ( float coordArray[] : particles_creation ) {    
+  //  createParticle( coordArray[0], coordArray[1] );
+  //}
   //cleaning array
   particles_creation.clear();
+  popMatrix();
+
+  pushMatrix();
+  drawCD();
   popMatrix();
 
   translate(-width/2, -height/2, -Rad);
@@ -480,6 +476,7 @@ void keyPressed() {
       destruction1.play();
       playDestruction1 = true;
     }
+    destroy();
     break;
 
   case 52:
@@ -488,6 +485,7 @@ void keyPressed() {
       destruction2.play();
       playDestruction2 = true;
     }
+    destroy();
     break;
 
     //case 32:
@@ -502,32 +500,24 @@ void keyPressed() {
 
 void inputSignal( int globe ) {
   if  (globe == 1) {
-    particles_remove.add( 1 );
-    particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
     }
   }
   if  (globe == 2) {
-    particles_add.add( 1 );
-    //particles_add.add(new Particle(new Vec2D(random(width), random(height))));
-    println( particles_add.size() );
     if (!playCreation2) {
       creation2.play();
       playCreation2 = true;
     }
   }
   if (globe == 3) {
-    println( particles_add.size() );
     if (!playDestruction1) {
       destruction1.play();
       playDestruction1 = true;
     }
   }
   if (globe == 4) {
-    particles_remove.add( 1 );
     if (!playDestruction2) {
       destruction2.play();
       playDestruction2 = true;

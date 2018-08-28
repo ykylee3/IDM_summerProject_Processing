@@ -15,7 +15,7 @@ class Particle extends VerletParticle2D {
 
   void display () {
     pushMatrix();
-    fill (255, 0, 0);
+    //fill (255, 0, 0);
     //translate(x, y);
     //sphere(r*2);
     shape(six, x, y);
