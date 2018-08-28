@@ -213,19 +213,19 @@ void setup() {
 
 // It will run this inside draw() every time a particle is removed
 // Add here whatever you want to appear in the dead particle coordinates
-void explodeParticle( float x, float y ) {
-  fill(0, 255, 255);
-  translate(x, y);
-  sphere(100);
-}
+//void explodeParticle( float x, float y ) {
+//  fill(0, 255, 255);
+//  translate(x, y);
+//  sphere(100);
+//}
 
 // It will run this inside draw() every time a particle is created
 // Add here whatever you want to appear in the new particle coordinates
-void createParticle( float x, float y ) {
-  fill(0, 255, 0);
-  translate(x, y);
-  sphere(100);
-}
+//void createParticle( float x, float y ) {
+//  fill(0, 255, 0);
+//  translate(x, y);
+//  sphere(100);
+//}
 
 //method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
 void pre() {
@@ -258,7 +258,7 @@ void pre() {
 }
 
 void draw() {
-  background(0);
+  background(200);
 
   //reset coordinates
   camera();
@@ -300,9 +300,10 @@ void draw() {
     //set coordinates and calls the function: create particles
     cdX = 0;
     cdY = 0;
-    particles_add.add( 1 );
-    println( particles_add.size() );
-    cd.add(new CD(new PVector(cdX,cdY)));
+    cdZ = 0;
+    //particles_add.add( 1 );
+    //println(particles_add.size() );
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();
 
@@ -424,25 +425,33 @@ void draw() {
   drawKinect();
   popMatrix();
 
+  
+  
   pushMatrix();
   //calling explosion
-  for ( float coordArray[] : particles_explosion ) {    
-    explodeParticle( coordArray[0], coordArray[1] );
-  }
+  //for ( float coordArray[] : particles_explosion ) {    
+  //  explodeParticle( coordArray[0], coordArray[1] );
+  //}
   //cleaning array
   particles_explosion.clear();
 
   //calling creation
-  for ( float coordArray[] : particles_creation ) {    
-    createParticle( coordArray[0], coordArray[1] );
-  }
+  //for ( float coordArray[] : particles_creation ) {    
+  //  createParticle( coordArray[0], coordArray[1] );
+  //}
   //cleaning array
   particles_creation.clear();
+  popMatrix();
+  
+  pushMatrix();
+  drawCD();
   popMatrix();
 
   translate(-width/2, -height/2, -Rad);
   drawBirds();
   drawPreds();
+  
+
 
   //if (playVO) {
   //  //random voice overs
