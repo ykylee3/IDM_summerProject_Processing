@@ -99,6 +99,7 @@ boolean playCreation1 = false;
 boolean playCreation2 = false;
 boolean playDestruction1 = false;
 boolean playDestruction2 = false;
+boolean destroy = false;
 
 ////initializing variables for random voice overs
 //float VOnow;
@@ -211,9 +212,9 @@ void setup() {
   kinect.setHighThresholdPC(maxD);
 
   //serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -222,24 +223,14 @@ void setup() {
 
 //method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
 void pre() {
-  //adds particles to the array particles_remove and from the particles added to 
-  //that array, removes particles from the array particles 
-  for ( Integer num : particles_remove ) {
-    int randParticleN = int( random( particles.size() ) );
-    Particle randParticle = particles.get( randParticleN );
-    println( randParticle.x(), randParticle.y() );
-    float coordArray[] = new float [] { randParticle.x(), randParticle.y() };
-    //calling explosion event
-    particles_explosion.add( coordArray );
-    //removes from particles
-    particles.remove( randParticleN );
+  if (destroy) {
+    destroy();
+    destroy = false;
   }
-  //clean array particles_remove
-  particles_remove.clear();
 }
 
 void draw() {
-  background(200);
+  background(0);
 
   //reset coordinates
   camera();
@@ -283,7 +274,6 @@ void draw() {
     cdY = -(Rad*0.1);
     cdZ = -(Rad*1.6);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
-    particles_remove.add( 1 );
   }
   popMatrix();
 
@@ -304,8 +294,7 @@ void draw() {
     cdY = -(Rad*0.6);
     cdZ = -(Rad*1.5);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
-    particles_remove.add( 1 );
-  }
+   }
   popMatrix();
 
   pushMatrix();
@@ -318,9 +307,9 @@ void draw() {
     //stops the video when a play is complete
     destruction1.pause();
     destruction1.jump(0); //rewind the video for the next play event
+    destroy = true;
     playDestruction1 = false;
-    destroy();
-  }
+   }
   popMatrix();
 
   pushMatrix();
@@ -332,8 +321,8 @@ void draw() {
     //stops the video when a play is complete
     destruction2.pause();
     destruction2.jump(0); //rewind the video for the next play event
+    destroy = true;
     playDestruction2 = false;
-    destroy();
   }
   popMatrix();
 
@@ -456,6 +445,7 @@ void keyPressed() {
   switch( key ) {
   case 49:
     inputSignal( 1 );
+    particles_remove.add( 1 );
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
@@ -464,6 +454,7 @@ void keyPressed() {
 
   case 50:
     inputSignal( 2 );
+    particles_remove.add( 1 );
     if (!playCreation2) {
       creation2.play();
       playCreation2 = true;
@@ -476,7 +467,6 @@ void keyPressed() {
       destruction1.play();
       playDestruction1 = true;
     }
-    destroy();
     break;
 
   case 52:
@@ -485,7 +475,6 @@ void keyPressed() {
       destruction2.play();
       playDestruction2 = true;
     }
-    destroy();
     break;
 
     //case 32:
@@ -500,12 +489,14 @@ void keyPressed() {
 
 void inputSignal( int globe ) {
   if  (globe == 1) {
+    particles_remove.add( 1 );
     if (!playCreation1) {
       creation1.play();
       playCreation1 = true;
     }
   }
   if  (globe == 2) {
+    particles_remove.add( 1 );
     if (!playCreation2) {
       creation2.play();
       playCreation2 = true;

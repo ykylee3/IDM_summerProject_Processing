@@ -1,4 +1,5 @@
 ArrayList<CD> cd = new ArrayList<CD>(); 
+int randParticleN;
 
 void drawCD() {
   for (CD p : cd) {
@@ -10,16 +11,16 @@ void drawCD() {
 }
 
 void destroy() {
-for ( Integer num : particles_remove ) {
-    int randParticleN = int( random( cd.size() ) );
+  for ( Integer num : particles_remove ) {
+    randParticleN = int( random(cd.size()) );
     CD randParticle = cd.get( randParticleN );
     println( randParticle.pos.x, randParticle.pos.y );
     float coordArray[] = new float [] { randParticle.pos.x, randParticle.pos.y };
     //calling explosion event
     //particles_explosion.add( coordArray );
-    //removes from particles
-    cd.remove( randParticleN );
   }
+  //removes from particles
+  cd.remove( randParticleN );
   //clean array particles_remove
   particles_remove.clear();
   println("after destroy particles array: " + cd.size());
