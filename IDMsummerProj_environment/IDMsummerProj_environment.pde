@@ -85,6 +85,11 @@ float startTime;
 float now = millis();
 float meshBeatRate = 4300;
 
+//kinect threshold in meters
+int maxD = 2;
+int minD = 1;
+
+
 //coordinates for the particles to be created (through plasma globe interactions)
 float cdX;
 float cdY;
@@ -200,7 +205,10 @@ void setup() {
   //Kinect Setup
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
+  kinect.enableDepthImg(true);
   kinect.init();
+  kinect.setLowThresholdPC(minD);
+  kinect.setHighThresholdPC(maxD);
 
   //serial communication
   myPort = new Serial(this, "COM4", 9600);
@@ -369,7 +377,6 @@ void draw() {
   placeElements();
   popMatrix();
 
-
   //to get the number of users and for each new user play the sound effect
   int getUsers = int(kinect.getNumOfUsers());
   if (getUsers > numUsers) {
@@ -397,8 +404,6 @@ void draw() {
   //draw kinect
   drawKinect();
   popMatrix();
-
-
 
   pushMatrix();
   //calling explosion
