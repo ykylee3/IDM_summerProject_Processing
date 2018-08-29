@@ -218,7 +218,7 @@ void setup() {
   kinect.enableSkeletonDepthMap(true);
   //kinect.enablePointCloud(true);
   kinect.init();
-  
+
   getUsers = int( kinect.getNumOfUsers() );
 
   //kinect.setLowThresholdPC(minD);
@@ -226,9 +226,9 @@ void setup() {
 
 
   //serial communication
-  //myPort = new Serial(this, "COM4", 9600);
-  //delay(1000);
-  //myPort.bufferUntil( 10 );
+  myPort = new Serial(this, "COM4", 9600);
+  delay(1000);
+  myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -272,6 +272,13 @@ void draw() {
   image(galaxy, 0, 0);
   popMatrix();
 
+  //check if cd particles are less than 2
+  //and adds new batch of particles
+  if (cd.size()<=2) {
+    addCD();
+    println("new batch of particles");
+  }
+
   pushMatrix();
   //draws the creation1 animation (on the left)
   rotateY(radians(30));
@@ -286,7 +293,7 @@ void draw() {
     //set coordinates and calls the function to create particles
     cdX = -Rad;
     cdY = -(Rad*0.1);
-    cdZ = -(Rad*1.6);
+    cdZ = -(Rad*0.6);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();

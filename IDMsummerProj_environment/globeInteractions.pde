@@ -55,11 +55,6 @@ class CD {
     pos.add(vel);
     acc.mult(0); //Reset acc every time update() is called.
     vel.limit(4);
-
-    if (cd.size()<2) {
-      addCD();
-      println("new batch of particles");
-    }
   }
 
   void display() {
