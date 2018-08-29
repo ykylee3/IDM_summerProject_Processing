@@ -13,7 +13,7 @@ void drawCD() {
 
 void destroy() {
   for ( Integer num : particles_remove ) {
-    randParticleN = int( random(cd.size()) );
+    randParticleN = int( random(cd.size()-1) );
     CD randParticle = cd.get( randParticleN );
     println( randParticle.pos.x, randParticle.pos.y );
     float coordArray[] = new float [] { randParticle.pos.x, randParticle.pos.y };

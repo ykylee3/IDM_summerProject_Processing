@@ -7,11 +7,10 @@ class Particle extends VerletParticle2D {
 
   Particle (Vec2D loc) {
     super(loc);
-    r = 4;
+    r = 1.5;
     physics.addParticle(this);
-    physics.addBehavior(new AttractionBehavior(this, r*random(10), -2));
+    physics.addBehavior(new AttractionBehavior(this, r*random(5), -1));
   }
-
 
   void display () {
     pushMatrix();

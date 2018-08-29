@@ -90,66 +90,82 @@ public ArrayList<float[]> getMyJoints(KJoint[] joints) {
 public void drawKinect() {
 
   ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
-  
+  ArrayList<KSkeleton> skeletonArray3D =  kinect.getSkeleton3d();
+
   //individual JOINTS
   for (int i = 0; i < skeletonArray.size(); i++) {
     KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
+    KSkeleton skeleton3D = (KSkeleton) skeletonArray3D.get(i);
     if (skeleton.isTracked() ) {
       KJoint[] joints = skeleton.getJoints();
+      KJoint[] joints3D = skeleton3D.getJoints();
+
       ArrayList<float[]> myJoints = getMyJoints(joints);
 
-      //color col  = skeleton.getIndexColor();
-      //fill(col);
-      //stroke(col);
+      float skeletonDistance = joints3D[KinectPV2.JointType_Head].getZ();
 
-      drawBody(joints);
-
-      //draw different color for each hand state
-      //drawHandState(joints[KinectPV2.JointType_HandRight]);
-      //drawHandState(joints[KinectPV2.JointType_HandLeft]);
-
-      // Creates attractors for each joint
-      for (int j = 0; j < joints.length - 1; j++) {
-        if (attractors[i][j] == null)
-        {
-          attractors[i][j] = new Attractor(new Vec2D(joints[j].getX(), joints[j].getY()));
-          println("Joint "+ j + " - " + joints[j].getX() + " - " + joints[j].getY());
-        } else {
-          attractors[i][j].set(joints[j].getX(), joints[j].getY());
+      if (skeletonDistance > 3) {
+        for (int j = 0; j < attractors[i].length; j++) {
+         if (attractors[i][j] != null){ 
+         attractors[i][j].remove();
+         attractors[i][j] = null;
+         }
         }
-        attractors[i][j].display();
-      }
+      } else {
 
-      //  int [] rawData = kinect.getRawDepthData();
-      //  for ( int d = 0; d < rawData.length; d++ ) {
-      //    if ( rawData[d] > maxD ) {
-      //      kinect.enableSkeletonColorMap(false);
-      //    }
-      //  }
-      //}
+        //color col  = skeleton.getIndexColor();
+        //fill(col);
+        //stroke(col);
 
-      int attr = joints.length - 1;
+        drawBody(joints);
 
-      //creates attractors for each custom joints
-      for (int t = 0; t < myJoints.size(); t++) {
-        fill(255, 255, 255);
-        //noFill();
-        //noStroke();
-        float[] myJoint = myJoints.get(t);
-        ellipse(myJoint[0], myJoint[1], 5, 5);
 
-        if (attractors[i][attr] == null)
-        {
-          attractors[i][attr] = new Attractor(new Vec2D(myJoint[0], myJoint[1]));
-        } else {
-          attractors[i][attr].set(myJoint[0], myJoint[1]);
+        //draw different color for each hand state
+        //drawHandState(joints[KinectPV2.JointType_HandRight]);
+        //drawHandState(joints[KinectPV2.JointType_HandLeft]);
+
+        // Creates attractors for each joint
+        for (int j = 0; j < joints.length - 1; j++) {
+          if (attractors[i][j] == null)
+          {
+            attractors[i][j] = new Attractor(new Vec2D(joints[j].getX(), joints[j].getY()));
+            println("Joint "+ j + " - " + joints[j].getX() + " - " + joints[j].getY());
+          } else {
+            attractors[i][j].set(joints[j].getX(), joints[j].getY());
+          }
+          attractors[i][j].display();
         }
-        attractors[i][attr].display();
-        attr++;
+
+        //  int [] rawData = kinect.getRawDepthData();
+        //  for ( int d = 0; d < rawData.length; d++ ) {
+        //    if ( rawData[d] > maxD ) {
+        //      kinect.enableSkeletonColorMap(false);
+        //    }
+        //  }
+        //}
+
+        int attr = joints.length - 1;
+
+        //creates attractors for each custom joints
+        for (int t = 0; t < myJoints.size(); t++) {
+          fill(255, 255, 255);
+          //noFill();
+          //noStroke();
+          float[] myJoint = myJoints.get(t);
+          ellipse(myJoint[0], myJoint[1], 5, 5);
+
+          if (attractors[i][attr] == null)
+          {
+            attractors[i][attr] = new Attractor(new Vec2D(myJoint[0], myJoint[1]));
+          } else {
+            attractors[i][attr].set(myJoint[0], myJoint[1]);
+          }
+          attractors[i][attr].display();
+          attr++;
+        }
       }
     }
   }
-
 }
 
 /*Skeleton from library KinectPV2*/

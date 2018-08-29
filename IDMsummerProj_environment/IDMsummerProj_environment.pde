@@ -38,19 +38,11 @@ KinectPV2 kinect;
 //main particles arraylist
 ArrayList<Particle> particles;
 
-//particles_add arraylist (used for adding particles to the main particles array)
-ArrayList<Integer> particles_add = new ArrayList<Integer>();
-
 //particles_remove arraylist (used for removing particles to the main particles array)
 ArrayList<Integer> particles_remove = new ArrayList<Integer>();
 
-//particles_explosion/creation arraylists 
-//(used to display particles with special effects in the same coordinates of the added/removed particles)
-ArrayList<float[]> particles_explosion = new ArrayList<float[]>();
-ArrayList<float[]> particles_creation = new ArrayList<float[]>();
-
 //attractor
-Attractor[][] attractors = new Attractor[4][1500];
+Attractor[][] attractors = new Attractor[6][1800];
 VerletPhysics2D physics;
 
 //shapes
@@ -120,8 +112,8 @@ int numUsers = 0;
 //  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
 
 void setup() {
-  //fullScreen(P3D, SPAN);
-  size(1280, 720, P3D);
+  fullScreen(P3D, SPAN);
+  //size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -190,7 +182,7 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(-(Rad+buffer), -(Rad+buffer), (Rad+buffer)*4, (Rad+buffer)*4));//do we need to set a world bound? YES:)
+  physics.setWorldBounds(new Rect(-(Rad+buffer)/2, -(Rad+buffer)/2, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -206,7 +198,6 @@ void setup() {
   //initialize creation/destruction array
   addCD();
 
-
   ambient.play();
   ambient.loop();
 
@@ -216,6 +207,7 @@ void setup() {
   kinect.enableDepthImg(true);
   kinect.enableDepthMaskImg(true);
   kinect.enableSkeletonDepthMap(true);
+  kinect.enableSkeleton3DMap(true);
   //kinect.enablePointCloud(true);
   kinect.init();
 
