@@ -1,6 +1,7 @@
 ArrayList<CD> cd = new ArrayList<CD>(); 
 int randParticleN;
 
+
 void drawCD() {
   for (CD p : cd) {
     p.update();
@@ -26,13 +27,22 @@ void destroy() {
   println("after destroy particles array: " + cd.size());
 }
 
+//create and destroy elements automatically overtime
+//to maintain the balance and avoid null pointer bugs
+void addCD() {  
+  for (int i=0; i <cdInit; i++) {
+    cd.add(new CD(new PVector(random(-Rad, Rad), random(-Rad, 0), random(-Rad, 0))));
+    println("add particles: " + i);
+  }
+}
+
 class CD {
   PVector pos;
   PVector vel;
   PVector acc;
   PVector min = new PVector(-(Rad), -(Rad*0.3), -(Rad));
   PVector max = new PVector((Rad), Rad*0.3, 0);
-
+  float lifespan = 60; //seconds
 
   CD(PVector p) {
     pos = p;
@@ -45,6 +55,11 @@ class CD {
     pos.add(vel);
     acc.mult(0); //Reset acc every time update() is called.
     vel.limit(4);
+
+    if (cd.size()<2) {
+      addCD();
+      println("new batch of particles");
+    }
   }
 
   void display() {
@@ -52,7 +67,7 @@ class CD {
     //scale(10, 10, 10);
     translate(pos.x, pos.y, pos.z);
     customRotate(2, 0.7, 0.4, 0.5);
-    scale(5, 5, 5);
+    scale(4, 4, 4);
     shape(sharpsphere, 0, 0);
     popMatrix();
   }

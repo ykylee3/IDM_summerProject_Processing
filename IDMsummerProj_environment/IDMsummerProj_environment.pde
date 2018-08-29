@@ -34,7 +34,6 @@ Serial myPort;  // Create object from Serial class
 
 //kinect
 KinectPV2 kinect;
-int numUsers = 0;
 
 //main particles arraylist
 ArrayList<Particle> particles;
@@ -85,21 +84,25 @@ float startTime;
 float now = millis();
 float meshBeatRate = 4300;
 
-//kinect threshold in meters
-int maxD = 2;
-int minD = 1;
-
+//kinect threshold 
+int maxD = 2000;
+int minD = 1000;
 
 //coordinates for the particles to be created (through plasma globe interactions)
 float cdX;
 float cdY;
 float cdZ;
+int cdInit = 7;
 
 boolean playCreation1 = false;
 boolean playCreation2 = false;
 boolean playDestruction1 = false;
 boolean playDestruction2 = false;
 boolean destroy = false;
+boolean drawSkeleton = false;
+
+int getUsers;
+int numUsers = 0;
 
 ////initializing variables for random voice overs
 //float VOnow;
@@ -200,6 +203,10 @@ void setup() {
   createMesh4Elements();
   plantSeed(); //plantseeds for Floating_elements, must be called after createMesh4Elements();
 
+  //initialize creation/destruction array
+  addCD();
+
+
   ambient.play();
   ambient.loop();
 
@@ -207,9 +214,16 @@ void setup() {
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
   kinect.enableDepthImg(true);
+  kinect.enableDepthMaskImg(true);
+  kinect.enableSkeletonDepthMap(true);
+  //kinect.enablePointCloud(true);
   kinect.init();
-  kinect.setLowThresholdPC(minD);
-  kinect.setHighThresholdPC(maxD);
+  
+  getUsers = int( kinect.getNumOfUsers() );
+
+  //kinect.setLowThresholdPC(minD);
+  //kinect.setHighThresholdPC(maxD);
+
 
   //serial communication
   //myPort = new Serial(this, "COM4", 9600);
@@ -294,7 +308,7 @@ void draw() {
     cdY = -(Rad*0.6);
     cdZ = -(Rad*1.5);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
-   }
+  }
   popMatrix();
 
   pushMatrix();
@@ -309,7 +323,7 @@ void draw() {
     destruction1.jump(0); //rewind the video for the next play event
     destroy = true;
     playDestruction1 = false;
-   }
+  }
   popMatrix();
 
   pushMatrix();
@@ -366,17 +380,6 @@ void draw() {
   placeElements();
   popMatrix();
 
-  //to get the number of users and for each new user play the sound effect
-  int getUsers = int(kinect.getNumOfUsers());
-  if (getUsers > numUsers) {
-    kinectEffect.play();
-    kinectEffect.rewind();
-    println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
-  }
-  numUsers = int(kinect.getNumOfUsers());
-  println(numUsers);
-  println(getUsers);
-
   pushMatrix();
   //updating physics of particles (kinect interaction)
   physics.update ();
@@ -390,24 +393,17 @@ void draw() {
     p.display();
     popMatrix();
   } 
+  //to get the number of users and for each new user play the sound effect
+  getUsers = int( kinect.getNumOfUsers() );
+  if ( getUsers > numUsers ) {
+    kinectEffect.play();
+    kinectEffect.rewind();
+    println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
+  }
+  numUsers = getUsers;
+  println("users: " + numUsers + " get users: " + getUsers);
   //draw kinect
   drawKinect();
-  popMatrix();
-
-  pushMatrix();
-  //calling explosion
-  //for ( float coordArray[] : particles_explosion ) {    
-  //  explodeParticle( coordArray[0], coordArray[1] );
-  //}
-  //cleaning array
-  particles_explosion.clear();
-
-  //calling creation
-  //for ( float coordArray[] : particles_creation ) {    
-  //  createParticle( coordArray[0], coordArray[1] );
-  //}
-  //cleaning array
-  particles_creation.clear();
   popMatrix();
 
   pushMatrix();
@@ -417,13 +413,13 @@ void draw() {
   translate(-width/2, -height/2, -Rad);
   drawBirds();
   drawPreds();
-
-  //if (playVO) {
-  //  //random voice overs
-  //  playTrack();
-  //  result = listComplete(tracksPlayed);
-  //}
 }
+
+//if (playVO) {
+//  //random voice overs
+//  playTrack();
+//  result = listComplete(tracksPlayed);
+//}
 
 //reads new frame of the movie 
 void movieEvent(Movie m) {

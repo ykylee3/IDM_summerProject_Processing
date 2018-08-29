@@ -10,7 +10,7 @@ float[] getMiddlePoint(float aX, float aY, float bX, float bY) {
 //return n points between two joints
 public float[][] getMiddlePoints(float aX, float aY, float bX, float bY, int points) {
   float[][] ret = new float[points][2];
- 
+
   float segX = (aX - bX) / (points + 1);
   float segY = (aY - bY) / (points + 1);
 
@@ -70,12 +70,12 @@ public ArrayList<float[]> getMyJoints(KJoint[] joints) {
     float bX = joints[combinations[i][1]].getX();
     float bY = joints[combinations[i][1]].getY();
     int nPoints = combinations[i][2];
-    
+
     //add joint to array
     ret.add(getMiddlePoint(aX, aY, bX, bY));
-    
+
     float[][] mp = getMiddlePoints(aX, aY, bX, bY, nPoints);
-    
+
     //for each n points within the combinations 
     for (int m = 0; m < mp.length; m++) {
       //adds joint to array
@@ -88,19 +88,20 @@ public ArrayList<float[]> getMyJoints(KJoint[] joints) {
 
 //adapted from KinectPV2
 public void drawKinect() {
-  ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
 
+  ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
+  
   //individual JOINTS
   for (int i = 0; i < skeletonArray.size(); i++) {
     KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
-    if (skeleton.isTracked()) {
+    if (skeleton.isTracked() ) {
       KJoint[] joints = skeleton.getJoints();
       ArrayList<float[]> myJoints = getMyJoints(joints);
 
       //color col  = skeleton.getIndexColor();
       //fill(col);
       //stroke(col);
-      
+
       drawBody(joints);
 
       //draw different color for each hand state
@@ -118,6 +119,14 @@ public void drawKinect() {
         }
         attractors[i][j].display();
       }
+
+      //  int [] rawData = kinect.getRawDepthData();
+      //  for ( int d = 0; d < rawData.length; d++ ) {
+      //    if ( rawData[d] > maxD ) {
+      //      kinect.enableSkeletonColorMap(false);
+      //    }
+      //  }
+      //}
 
       int attr = joints.length - 1;
 
@@ -140,6 +149,7 @@ public void drawKinect() {
       }
     }
   }
+
 }
 
 /*Skeleton from library KinectPV2*/
