@@ -276,16 +276,18 @@ void draw() {
   translate(-Rad*2, -(Rad*0.3), -Rad*1.5);
   rotateY(radians(40));
   image(creation1, 0, 0);
-  if (creation1.time() >= creation1.duration()-0.2) {
-    //stops the video when a play is complete
-    creation1.pause();
-    creation1.jump(0); //rewind the video for the next play event
-    playCreation1 = false;
+  if (creation1.time() >= creation1.duration()-3) {
     //set coordinates and calls the function to create particles
     cdX = -Rad;
     cdY = -(Rad*0.1);
     cdZ = -(Rad*0.6);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+  }
+  if (creation1.time() >= creation1.duration()-0.2) {
+    //stops the video when a play is complete
+    creation1.pause();
+    creation1.jump(0); //rewind the video for the next play event
+    playCreation1 = false;
   }
   popMatrix();
 
@@ -296,16 +298,18 @@ void draw() {
   translate((-Rad), -(Rad), -(Rad*2));
   rotateX(-radians(20));
   image(creation2, 0, 0);
-  if (creation2.time() >= creation2.duration()-0.2) {
-    //stops the video when a play is complete
-    creation2.pause();
-    creation2.jump(0); //rewind the video for the next play event
-    playCreation2 = false;
+  if (creation2.time() >= creation2.duration()-1) {
     //set coordinates and calls the function to create particles
     cdX = Rad*0.3;
     cdY = -(Rad*0.6);
     cdZ = -(Rad*1.5);
     cd.add(new CD(new PVector(cdX, cdY, cdZ)));
+  }
+  if (creation2.time() >= creation2.duration()-0.2) {
+    //stops the video when a play is complete
+    creation2.pause();
+    creation2.jump(0); //rewind the video for the next play event
+    playCreation2 = false;
   }
   popMatrix();
 
@@ -482,30 +486,56 @@ void keyPressed() {
 }
 
 void inputSignal( int globe ) {
-  if  (globe == 1) {
-    particles_remove.add( 1 );
-    if (!playCreation1) {
-      creation1.play();
-      playCreation1 = true;
-    }
-  }
+  //if  (globe == 1) {
+  //  particles_remove.add( 1 );
+  //  if (!playCreation1) {
+  //    creation1.play();
+  //    playCreation1 = true;
+  //  }
+  //}
   if  (globe == 2) {
-    particles_remove.add( 1 );
-    if (!playCreation2) {
-      creation2.play();
-      playCreation2 = true;
+    int rndN = int(random(1));
+    switch(rndN) {
+    case 0:
+      particles_remove.add( 1 );
+      if (!playCreation2) {
+        creation2.play();
+        playCreation2 = true;
+      }
+      break;
+
+    case 1:
+      if (!playDestruction2) {
+        destruction2.play();
+        playDestruction2 = true;
+      }
+      break;
     }
   }
+
   if (globe == 3) {
-    if (!playDestruction1) {
-      destruction1.play();
-      playDestruction1 = true;
+    int rndN = int(random(1));
+    switch(rndN) {
+    case 0:
+      particles_remove.add( 1 );
+      if (!playCreation1) {
+        creation1.play();
+        playCreation1 = true;
+      }
+      break;
+
+    case 1:
+      if (!playDestruction1) {
+        destruction1.play();
+        playDestruction1 = true;
+      }
+      break;
     }
   }
-  if (globe == 4) {
-    if (!playDestruction2) {
-      destruction2.play();
-      playDestruction2 = true;
-    }
-  }
+  //if (globe == 4) {
+  //  if (!playDestruction2) {
+  //    destruction2.play();
+  //    playDestruction2 = true;
+  //  }
+  //}
 }
