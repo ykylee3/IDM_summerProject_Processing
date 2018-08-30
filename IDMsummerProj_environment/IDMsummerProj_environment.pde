@@ -112,8 +112,8 @@ int numUsers = 0;
 //  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
 
 void setup() {
-  fullScreen(P3D, SPAN);
-  //size(1280, 720, P3D);
+  //fullScreen(P3D, SPAN);
+  size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -216,7 +216,6 @@ void setup() {
   //kinect.setLowThresholdPC(minD);
   //kinect.setHighThresholdPC(maxD);
 
-
   //serial communication
   myPort = new Serial(this, "COM4", 9600);
   delay(1000);
@@ -276,7 +275,7 @@ void draw() {
   translate(-Rad*2, -(Rad*0.3), -Rad*1.5);
   rotateY(radians(40));
   image(creation1, 0, 0);
-  if (creation1.time() >= creation1.duration()-3) {
+  if (creation1.time() == creation1.duration()-3) {
     //set coordinates and calls the function to create particles
     cdX = -Rad;
     cdY = -(Rad*0.1);
@@ -298,7 +297,7 @@ void draw() {
   translate((-Rad), -(Rad), -(Rad*2));
   rotateX(-radians(20));
   image(creation2, 0, 0);
-  if (creation2.time() >= creation2.duration()-1) {
+  if (creation2.time() == creation2.duration()-1) {
     //set coordinates and calls the function to create particles
     cdX = Rad*0.3;
     cdY = -(Rad*0.6);
