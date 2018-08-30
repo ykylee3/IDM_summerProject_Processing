@@ -7,6 +7,8 @@ import peasy.PeasyCam;
 import toxi.geom.*;
 import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
+import toxi.physics2d.constraints.*;
+import toxi.physics.constraints.*;
 
 import KinectPV2.KJoint;
 import KinectPV2.*;
@@ -42,7 +44,7 @@ ArrayList<Particle> particles;
 ArrayList<Integer> particles_remove = new ArrayList<Integer>();
 
 //attractor
-Attractor[][] attractors = new Attractor[6][1800];
+Attractor[][] attractors = new Attractor[6][1500];
 VerletPhysics2D physics;
 
 //shapes
@@ -182,13 +184,13 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(-(Rad+buffer)/2, -(Rad+buffer)/2, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
+  //physics.setWorldBounds(new Rect(-(Rad+buffer)/2, -(Rad+buffer)/2, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
-    particles.add(new Particle(new Vec2D(random(Rad*2), random(Rad*2))));
+    particles.add(new Particle(new Vec2D(random(-Rad*2, Rad*2), random(-Rad*2, Rad*2))));
   }
-
+    
   initBirds(250);
   initPreds(40);
   sphereMeshSetup();
@@ -385,12 +387,16 @@ void draw() {
 
   pushMatrix();
   //display particles
-  translate(-Rad, -Rad, -(Rad*0.75));
+  translate(0, 0, -(Rad*0.75));
   for (Particle p : particles) {
     pushMatrix();
     p.display();
     popMatrix();
   } 
+  popMatrix();
+  
+  pushMatrix();
+  translate(-Rad, -Rad, -(Rad*0.75));
   //to get the number of users and for each new user play the sound effect
   getUsers = int( kinect.getNumOfUsers() );
   if ( getUsers > numUsers ) {
