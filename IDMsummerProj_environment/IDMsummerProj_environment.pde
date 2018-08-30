@@ -239,7 +239,7 @@ void pre() {
 }
 
 void draw() {
-  background(200);
+  background(0);
 
   //reset coordinates
   camera();
@@ -426,6 +426,7 @@ void draw() {
   for (int i=0; i<bodies.size (); i++) 
   {
     drawSkeleton(bodies.get(i));
+    //draws the user ID
     drawPosition(bodies.get(i));
   }
   popMatrix();
