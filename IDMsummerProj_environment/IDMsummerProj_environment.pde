@@ -8,8 +8,10 @@ import toxi.geom.*;
 import toxi.physics2d.*;
 import toxi.physics2d.behaviors.*;
 
-import KinectPV2.KJoint;
-import KinectPV2.*;
+//import KinectPV2.KJoint;
+//import KinectPV2.*;
+import kinect4WinSDK.Kinect;
+import kinect4WinSDK.SkeletonData;
 
 //serial lib
 import processing.serial.*;
@@ -33,7 +35,9 @@ Movie destruction2;
 Serial myPort;  // Create object from Serial class
 
 //kinect
-KinectPV2 kinect;
+//KinectPV2 kinect;
+Kinect kinect;
+ArrayList <SkeletonData> bodies;
 
 //main particles arraylist
 ArrayList<Particle> particles;
@@ -118,8 +122,6 @@ void setup() {
   //for debuggings
   sphereDetail(8);
 
-  minim = new Minim(this);
-
   ////loads voice over files
   //sequence0 = minim.loadFile("1_3.mp3");
   //sequence1 = minim.loadFile("2_3.mp3");
@@ -202,24 +204,27 @@ void setup() {
   ambient.loop();
 
   //Kinect Setup
-  kinect = new KinectPV2(this);
-  kinect.enableSkeletonColorMap(true);
-  kinect.enableDepthImg(true);
-  kinect.enableDepthMaskImg(true);
-  kinect.enableSkeletonDepthMap(true);
-  kinect.enableSkeleton3DMap(true);
-  //kinect.enablePointCloud(true);
-  kinect.init();
+  //kinect = new KinectPV2(this);
+  //kinect.enableSkeletonColorMap(true);
+  //kinect.enableDepthImg(true);
+  //kinect.enableDepthMaskImg(true);
+  //kinect.enableSkeletonDepthMap(true);
+  //kinect.enableSkeleton3DMap(true);
+  ////kinect.enablePointCloud(true);
+  //kinect.init();
+  kinect = new Kinect(this);
+  smooth();
+  bodies = new ArrayList<SkeletonData>();
 
-  getUsers = int( kinect.getNumOfUsers() );
+  //getUsers = int( kinect.getNumOfUsers() );
 
   //kinect.setLowThresholdPC(minD);
   //kinect.setHighThresholdPC(maxD);
 
   //serial communication
-  myPort = new Serial(this, "COM4", 9600);
-  delay(1000);
-  myPort.bufferUntil( 10 );
+  //myPort = new Serial(this, "COM4", 9600);
+  //delay(1000);
+  //myPort.bufferUntil( 10 );
 
   //Will run before draw, but always before draw runs, middle way among draw and setup
   registerMethod("pre", this);
@@ -234,7 +239,7 @@ void pre() {
 }
 
 void draw() {
-  background(0);
+  background(200);
 
   //reset coordinates
   camera();
@@ -395,16 +400,34 @@ void draw() {
     popMatrix();
   } 
   //to get the number of users and for each new user play the sound effect
-  getUsers = int( kinect.getNumOfUsers() );
-  if ( getUsers > numUsers ) {
-    kinectEffect.play();
-    kinectEffect.rewind();
-    println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
+  //getUsers = int( kinect.getNumOfUsers() );
+  //if ( getUsers > numUsers ) {
+  //  kinectEffect.play();
+  //  kinectEffect.rewind();
+  //  println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
+  //}
+  //numUsers = getUsers;
+  //println("users: " + numUsers + " get users: " + getUsers);
+  ////draw kinect
+  //drawKinect();
+  popMatrix();
+
+  //pushMatrix();
+  ////translate(-Rad/2, -Rad/2, -(Rad*0.75));
+  ////scale(2, 2);
+  //translate(0, 0, -(Rad));
+  ////image(findUserMasks(kinect.GetMask()), -Rad, -Rad, Rad*2, Rad*2);
+  //image(getSkeletonPoints(), -Rad, -Rad, Rad*2, Rad*2);
+  //popMatrix();
+
+  pushMatrix();
+  translate(-Rad/2, -Rad/2, -(Rad*0.75));
+  scale(2, 2);
+  for (int i=0; i<bodies.size (); i++) 
+  {
+    drawSkeleton(bodies.get(i));
+    drawPosition(bodies.get(i));
   }
-  numUsers = getUsers;
-  println("users: " + numUsers + " get users: " + getUsers);
-  //draw kinect
-  drawKinect();
   popMatrix();
 
   pushMatrix();
