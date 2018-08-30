@@ -21,3 +21,6 @@ class Particle extends VerletParticle2D {
     popMatrix();
   }
 }
+
+//if p.positionX>Rad/2 || p.positionX<Rad/2
+//if p.positionY>Rad/3 || p.positionY<-Rad/3

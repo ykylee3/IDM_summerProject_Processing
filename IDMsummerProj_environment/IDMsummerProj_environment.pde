@@ -226,7 +226,6 @@ void setup() {
   registerMethod("pre", this);
 }
 
-
 //method always executed before the draw() method (being used to update the physics engine and avoid thread issues)
 void pre() {
   if (destroy) {
@@ -362,7 +361,7 @@ void draw() {
   pushMatrix();
   //draws the jupiter model
   rotate(radians(26.73));
-  translate(Rad+buffer/2, -(Rad*0.4), -buffer*2);
+  translate(Rad+buffer/2, -(Rad*0.4), -buffer*2.5);
   customRotate(1, 0, 1, 0);
   scale(0.4, 0.5, 0.4);
   shape(jupiter, 0, 0);

@@ -1,7 +1,9 @@
 import ddf.minim.*;
+import ddf.minim.ugens.*;
 import java.util.Random;
 
 Minim minim;
+Gain gain;
 Random r = new Random();
 
 float VOnow;
@@ -21,6 +23,7 @@ AudioPlayer sequence0, sequence1, sequence2, sequence3, sequence4, sequence5, se
 void setup() {
   size(10, 10);
   minim = new Minim(this);
+  gain = new Gain(3.f);
 
   sequence0 = minim.loadFile("1_3.mp3");
   sequence1 = minim.loadFile("2_3.mp3");
