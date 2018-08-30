@@ -9,12 +9,11 @@ ParticleConstraint2D myConstraint = new myConstraint();
 
 class myConstraint implements ParticleConstraint2D {
   public void apply(VerletParticle2D p) {
-    if (p.x > Rad*1.5 || p.x < -Rad*1.5) {
-      p.x = 0;
+    if (p.x > Rad*1.7 || p.x < -Rad*1.7) {
+      p.x = random((-Rad/2), (Rad/2));
     }
-    if (p.y > Rad*1.5 || p.y < -Rad*1.5) {
-      p.y = 0;
-      //p.y = random((-Rad/3), (Rad/3));
+    if (p.y > Rad*1.7 || p.y < -Rad*1.7) {
+      p.y = random((-Rad/2), (Rad/2));
     }
   }
 }

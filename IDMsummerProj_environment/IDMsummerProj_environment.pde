@@ -44,7 +44,7 @@ ArrayList<Particle> particles;
 ArrayList<Integer> particles_remove = new ArrayList<Integer>();
 
 //attractor
-Attractor[][] attractors = new Attractor[6][1500];
+Attractor[][] attractors = new Attractor[6][1000];
 VerletPhysics2D physics;
 
 //shapes
