@@ -8,7 +8,7 @@ void drawCD() {
     p.display();
     p.bounce();
   }
-  println("destroy particles array: " + cd.size());
+  //println("destroy particles array: " + cd.size());
 }
 
 void destroy() {
@@ -24,7 +24,7 @@ void destroy() {
   cd.remove( randParticleN );
   //clean array particles_remove
   particles_remove.clear();
-  println("after destroy particles array: " + cd.size());
+  //println("after destroy particles array: " + cd.size());
 }
 
 //create and destroy elements automatically overtime
@@ -32,7 +32,7 @@ void destroy() {
 void addCD() {  
   for (int i=0; i <cdInit; i++) {
     cd.add(new CD(new PVector(random(-Rad, Rad), random(-Rad, 0), random(-Rad, 0))));
-    println("add particles: " + i);
+    //println("add particles: " + i);
   }
 }
 

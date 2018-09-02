@@ -129,7 +129,7 @@ public void drawKinect() {
           if (attractors[i][j] == null)
           {
             attractors[i][j] = new Attractor(new Vec2D(joints[j].getX(), joints[j].getY()));
-            println("Joint "+ j + " - " + joints[j].getX() + " - " + joints[j].getY());
+            //println("Joint "+ j + " - " + joints[j].getX() + " - " + joints[j].getY());
           } else {
             attractors[i][j].set(joints[j].getX(), joints[j].getY());
           }

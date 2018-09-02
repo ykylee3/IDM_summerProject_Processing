@@ -68,6 +68,8 @@ int[] elementCache;
 int nPoints = 1500;  //The number of vertices to be shown
 int nElements = 50;  //The number of floating elements
 int nFloatObj = 4;   //Total number of varaieties for floating elements
+int g1 = 0; //boolean switch for alternating animation effects
+int g2 = 0;
 
 float Rad = 1000; //The to-be-formed sphere's (the 'dome' container) radius
 float buffer = 200; //distance between the shpere mesh and the floating elements
@@ -112,8 +114,8 @@ int numUsers = 0;
 //  sequence7, sequence8, sequence9, sequence10, sequence11, sequence12;
 
 void setup() {
-  //fullScreen(P3D, SPAN);
-  size(1280, 720, P3D);
+  fullScreen(P3D, SPAN);
+  //size(1280, 720, P3D);
 
   //for debuggings
   sphereDetail(8);
@@ -182,7 +184,7 @@ void setup() {
   //add physics to the world (toxiclibs)
   physics = new VerletPhysics2D ();
   physics.setDrag ( 0.01 );
-  physics.setWorldBounds(new Rect(-(Rad+buffer)/2, -(Rad+buffer)/2, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
+  physics.setWorldBounds(new Rect(-(Rad)/2, -(Rad+buffer)/2, (Rad+buffer)*2, (Rad+buffer)*2));//do we need to set a world bound? YES:)
   //physics.addBehavior(new GravityBehavior(new Vec2D(0, 0.01f)));
   particles = new ArrayList<Particle>();
   for (int i=0; i<attractors[0].length; i++) {
@@ -266,7 +268,7 @@ void draw() {
   //and adds new batch of particles
   if (cd.size()<=2) {
     addCD();
-    println("new batch of particles");
+    //println("new batch of particles");
   }
 
   pushMatrix();
@@ -275,18 +277,16 @@ void draw() {
   translate(-Rad*2, -(Rad*0.3), -Rad*1.5);
   rotateY(radians(40));
   image(creation1, 0, 0);
-  if (creation1.time() == creation1.duration()-3) {
-    //set coordinates and calls the function to create particles
-    cdX = -Rad;
-    cdY = -(Rad*0.1);
-    cdZ = -(Rad*0.6);
-    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
-  }
   if (creation1.time() >= creation1.duration()-0.2) {
     //stops the video when a play is complete
     creation1.pause();
     creation1.jump(0); //rewind the video for the next play event
     playCreation1 = false;
+    //set coordinates and calls the function to create particles
+    cdX = -Rad;
+    cdY = -(Rad*0.1);
+    cdZ = -(Rad*0.6);
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();
 
@@ -297,18 +297,16 @@ void draw() {
   translate((-Rad), -(Rad), -(Rad*2));
   rotateX(-radians(20));
   image(creation2, 0, 0);
-  if (creation2.time() == creation2.duration()-1) {
-    //set coordinates and calls the function to create particles
-    cdX = Rad*0.3;
-    cdY = -(Rad*0.6);
-    cdZ = -(Rad*1.5);
-    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
-  }
   if (creation2.time() >= creation2.duration()-0.2) {
     //stops the video when a play is complete
     creation2.pause();
     creation2.jump(0); //rewind the video for the next play event
     playCreation2 = false;
+    //set coordinates and calls the function to create particles
+    cdX = Rad*0.3;
+    cdY = -(Rad*0.6);
+    cdZ = -(Rad*1.5);
+    cd.add(new CD(new PVector(cdX, cdY, cdZ)));
   }
   popMatrix();
 
@@ -399,10 +397,10 @@ void draw() {
   if ( getUsers > numUsers ) {
     kinectEffect.play();
     kinectEffect.rewind();
-    println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
+    //println("numUsers var value is " + numUsers + " and the value of getUsers is " + getUsers);
   }
   numUsers = getUsers;
-  println("users: " + numUsers + " get users: " + getUsers);
+  //println("users: " + numUsers + " get users: " + getUsers);
   //draw kinect
   drawKinect();
   popMatrix();
@@ -411,7 +409,7 @@ void draw() {
   drawCD();
   popMatrix();
 
-  translate(-width/2, -height/2, -Rad);
+  translate(0, 0, -Rad);
   drawBirds();
   drawPreds();
 }
@@ -493,45 +491,39 @@ void inputSignal( int globe ) {
   //  }
   //}
   if  (globe == 2) {
-    int rndN = int(random(1));
-    switch(rndN) {
-    case 0:
+    if (g1 == 0) {
       particles_remove.add( 1 );
       if (!playCreation2) {
         creation2.play();
         playCreation2 = true;
       }
-      break;
-
-    case 1:
+      g1 = 1;
+    } else {
       if (!playDestruction2) {
         destruction2.play();
         playDestruction2 = true;
       }
-      break;
+      g1 = 0;
     }
   }
 
   if (globe == 3) {
-    int rndN = int(random(1));
-    switch(rndN) {
-    case 0:
+    if (g2 == 0) {
       particles_remove.add( 1 );
       if (!playCreation1) {
         creation1.play();
         playCreation1 = true;
       }
-      break;
-
-    case 1:
+      g2 = 1;
+    } else {    
       if (!playDestruction1) {
         destruction1.play();
         playDestruction1 = true;
       }
-      break;
+      g2 = 0;
     }
   }
-  //if (globe == 4) {
+  //if (globe =uyjh67= 4) {
   //  if (!playDestruction2) {
   //    destruction2.play();
   //    playDestruction2 = true;
